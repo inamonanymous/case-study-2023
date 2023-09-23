@@ -4,8 +4,10 @@ db = SQLAlchemy()
 class Person(db.Model):
     __tablename__ = 'person'
     person_id = db.Column(db.Integer, primary_key=True)
+    person_firstname = db.Column(db.String(50), nullable=False)
+    person_surmame = db.Column(db.String(50), nullable=False)
     phone_number = db.Column(db.String(15))
-    email_address = db.Column(db.String(45))
+    email_address = db.Column(db.String(45), nullable=False)
 
 
 class Student(Person):

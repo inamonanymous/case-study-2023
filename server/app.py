@@ -1,20 +1,20 @@
 from flask import Flask, render_template
 import os
-from routes.user import user_bp
-from models.person import db
+from models.equipment import db
 from dotenv import load_dotenv
+from flask_restful import Api
+from resource.user import ShowEquipments, Equipments
 
-
+load_dotenv() 
 app = Flask(__name__)
-load_dotenv()
-app.secret_key = os.getenv("SECRET_KEY")
+app.secret_key = os.getenv("SECRET_KEY") 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URI")
-db.init_app(app)
 
-with app.app_context():
-    db.create_all()
+db.init_app(app) 
+api = Api(app)
 
-app.register_blueprint(user_bp)
+api.add_resource(ShowEquipments, '/user/equipments/all')
+api.add_resource(Equipments, '/user/equipments/<int:id>')
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
