@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
+
+function booleanToYesNo(value) {
+  return value ? 'Yes' : 'No';
+}
 
 function AvailableItems() {
-    const [items, setItems] = useState({ name: [], isAvailable: [] });
+    const [items, setItems] = useState({ equip_id: [], equip_type: [], equip_unique_key: [], is_available: [], is_pending: [] });
 
     useEffect(() => {
-      // Fetch data from the '/user/samplejson' route
-      fetch('/user/samplejson')
+      // Fetch data from the '/user/equipments/all' route
+      fetch('/user/equipments/all')
         .then((response) => response.json())
         .then((data) => {
           // Update the state with the fetched data
@@ -23,20 +28,28 @@ function AvailableItems() {
         <table>
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Is Available</th>
+              <th>Type</th>
+              <th>Unique</th>
+              <th>Available</th>
+              <th>Pending</th>
             </tr>
           </thead>
           <tbody>
-            {items.name.map((name, index) => (
+            {items.equip_unique_key.map((unique_key, index) => (
                 <tr key={index}>
-                    <td>{name}</td>
-                    <td>{items.isAvailable[index]}</td>
+                    <td>{items.equip_type[index]}</td>
+                    <td>{unique_key}</td>
+                    <td>{booleanToYesNo(items.is_available[index])}</td>
+                    <td>{booleanToYesNo(items.is_pending[index])}</td>
+                    <td>
+                    <Link to={`/request-equipment/${items.equip_id[index]}`}>
+                      <button>Borrow</button>
+                    </Link>
+                    </td>
                 </tr>
             ))}
           </tbody>
         </table>
-        <p>This component is shared among multiple pages.</p>
       </div>
     );
   }

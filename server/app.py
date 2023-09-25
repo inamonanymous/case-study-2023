@@ -1,17 +1,19 @@
 from flask import Flask, render_template
 import os
-from models.equipment import db
+from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
 from flask_restful import Api
 from resource.user import ShowEquipments, Equipments
+from models.equipment import db
 
 load_dotenv() 
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY") 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URI")
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URI')
 
-db.init_app(app) 
+db.init_app(app)
 api = Api(app)
+
 
 api.add_resource(ShowEquipments, '/user/equipments/all')
 api.add_resource(Equipments, '/user/equipments/<int:id>')
@@ -21,4 +23,6 @@ def index():
     return render_template('index.html')
 
 if __name__ == "__main__":
+    with app.app_context():
+        db.create_all()
     app.run(host="0.0.0.0",port="5000",debug=True)

@@ -1,0 +1,3 @@
+borrowed = isAvail = False & isPending = False
+available = isAvail = True & isPending = False
+pending = isAvail = False & isPending = True

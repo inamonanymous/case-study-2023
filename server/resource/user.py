@@ -1,7 +1,5 @@
-from flask import current_app
 from flask_restful import Resource, abort, fields, marshal_with, reqparse
 from models.equipment import Equipment, db
-
 
 equipment_resource_fields = {
     'equip_id' : fields.Integer,
@@ -14,12 +12,14 @@ equipment_resource_fields = {
 class ShowEquipments(Resource):
     def get(self):
         equipment = Equipment.query.all()
+        equip_id = [e.equip_id for e in equipment]
         equip_type = [e.equip_type for e in equipment]
         equip_unique_key = [e.equip_unique_key for e in equipment]
         is_available = [e.is_available for e in equipment]
         is_pending = [e.is_pending for e in equipment]
 
         equipments = {
+            "equip_id": equip_id,
             "equip_type": equip_type,
             "equip_unique_key": equip_unique_key,
             "is_available": is_available,
@@ -50,16 +50,18 @@ class Equipments(Resource):
         equipment = Equipment.query.filter_by(equip_id=id).first()
         if equipment:
             abort(409, message="Equipment Exists")
-        equip_obj = Equipment(equip_type=args['args_equip_type'],
+        equip_obj = Equipment(equip_id=id,
+                              equip_type=args['args_equip_type'],
                               equip_unique_key=args['args_equip_unique_key'],
                               is_available=args['args_is_available'],
                               is_pending=args['args_is_pending']
                               )
-        print("asdasd"+args)
+        
         
         # Add the new equipment object to the session
         db.session.add(equip_obj)
 
         # Commit the changes to the database
         db.session.commit()
+        
         return equip_obj, 201
