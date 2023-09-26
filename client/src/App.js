@@ -13,11 +13,11 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" exact element={<Greeting />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard" exact element={<Dashboard />} />
         <Route path="/borrowed-items" element={<BorrowedItems />} />
         <Route path="/available-items" element={<AvailableItems />} />
         <Route path="/pending-items" element={<PendingItems />} />
-        <Route path="/request-equipment/:unique_key" element={<RequestEquipment />} />
+        <Route path="/request-equipment/:equip_id" element={<RequestEquipment />} />
       </Routes>
     </Router>
   );

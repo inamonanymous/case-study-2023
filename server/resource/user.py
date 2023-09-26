@@ -1,5 +1,6 @@
 from flask_restful import Resource, abort, fields, marshal_with, reqparse
-from models.equipment import Equipment, db
+from flask import request, jsonify
+from models.database import db, Equipment, Person
 
 equipment_resource_fields = {
     'equip_id' : fields.Integer,
@@ -65,3 +66,68 @@ class Equipments(Resource):
         db.session.commit()
         
         return equip_obj, 201
+    
+
+post_args_person = reqparse.RequestParser()
+post_args_person.add_argument("args_person_firstname", type=str, required=True, help="firstname is required")
+post_args_person.add_argument("args_person_surname", type=str, required=True, help="surname is required")
+post_args_person.add_argument("args_phone_number", type=str)
+post_args_person.add_argument("args_email_address", type=str, required=True, help="email is required")
+
+
+person_resource_fields = {
+    'person_firstname' : fields.String,
+    'person_surname': fields.String,
+    'phone_number': fields.String,
+    'email_address': fields.String
+}
+
+class CheckPersons(Resource):
+    def post(self):
+        try:
+            data = request.get_json()
+            email = data.get('email')
+            # Check if email exists in the database (simplified example)
+            existing_person = Person.query.filter_by(email_address=email).first()
+            response_data = {
+                'emailExists': existing_person is not None
+            }
+            print(response_data)
+            return jsonify(response_data)
+
+        except Exception as e:
+            return jsonify({'error': str(e)}), 500
+
+class Persons(Resource):
+    @marshal_with(person_resource_fields)
+    def post(self):
+        try:
+            args = post_args_person.parse_args()
+            email = args['args_email_address']
+
+            # Log the received data for debugging
+            print('Received data:', args)
+            
+            # Check if a person with the same email_address already exists
+            existing_person = Person.query.filter_by(email_address=email).first()
+            if existing_person:
+                print('Person with the same email_address already exists:', email)
+                abort(409, message="Person with the same email_address already exists")
+
+            person_obj = Person(
+                person_firstname=args['args_person_firstname'],
+                person_surname=args['args_person_surname'],
+                phone_number=args['args_phone_number'],
+                email_address=args['args_email_address']
+            )
+
+            db.session.add(person_obj)
+            db.session.commit()
+            
+            print('Person added successfully:', person_obj)
+
+            return person_obj, 201
+
+        except Exception as e:
+            print('Error:', str(e))
+            return jsonify({'error': str(e)}), 500
