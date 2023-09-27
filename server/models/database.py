@@ -29,27 +29,23 @@ class Borrowed(Pending):
     pending_id = db.Column(db.Integer, db.ForeignKey('pending.pending_id'), nullable=False)
 
 
-class Person(db.Model):
-    __tablename__ = 'person'
-    person_id = db.Column(db.Integer, primary_key=True)
-    person_firstname = db.Column(db.String(50), nullable=False)
-    person_surname = db.Column(db.String(50), nullable=False)
-    phone_number = db.Column(db.String(15))
-    email_address = db.Column(db.String(45), nullable=False, unique=True)
-
-
-class Student(Person):
+class Student(db.Model):
     __tablename__ = 'student'
     student_id = db.Column(db.Integer, primary_key=True)
     student_number = db.Column(db.String(20), unique=True, nullable=False)
+    student_section = db.Column(db.String(10))
     student_department = db.Column(db.String(45), nullable=False)
     student_year = db.Column(db.String(10), nullable=False)
-    email_address = db.Column(db.String(45), db.ForeignKey('person.email_address'), nullable=False)
+    student_email_address = db.Column(db.String(45), nullable=False)
+    student_firstname = db.Column(db.String(50), nullable=False)
+    student_surname = db.Column(db.String(50), nullable=False)
+    
 
-
-class Admin(Person):
+class Admin(db.Model):
     __tablename__ = 'admin'
     admin_id = db.Column(db.Integer, primary_key=True)
     admin_username = db.Column(db.String(50), nullable=False, unique=True)
     admin_password = db.Column(db.String(50), nullable=False)
-    email_address = db.Column(db.String(45), db.ForeignKey('person.email_address'), nullable=False)
+    admin_email_address = db.Column(db.String(45), nullable=False)
+    admin_firstname = db.Column(db.String(45), nullable=False)
+    admin_surname = db.Column(db.String(45), nullable=False)

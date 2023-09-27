@@ -17,7 +17,7 @@ function App() {
         <Route path="/borrowed-items" element={<BorrowedItems />} />
         <Route path="/available-items" element={<AvailableItems />} />
         <Route path="/pending-items" element={<PendingItems />} />
-        <Route path="/request-equipment/:equip_id" element={<RequestEquipment />} />
+        <Route path="/request-equipment/:equip_unique_key" element={<RequestEquipment />} />
       </Routes>
     </Router>
   );

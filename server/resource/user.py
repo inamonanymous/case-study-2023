@@ -1,6 +1,6 @@
 from flask_restful import Resource, abort, fields, marshal_with, reqparse
 from flask import request, jsonify
-from models.database import db, Equipment, Person
+from models.database import db, Equipment, Student
 
 equipment_resource_fields = {
     'equip_id' : fields.Integer,
@@ -38,8 +38,8 @@ post_args_equip.add_argument("args_is_pending", type=bool, required=True, help="
 
 class Equipments(Resource):
     @marshal_with(equipment_resource_fields)
-    def get(self, id):
-        equipment = Equipment.query.filter_by(equip_id=id).first()
+    def get(self, unique_key):
+        equipment = Equipment.query.filter_by(equip_unique_key=unique_key).first()
         if not equipment:
             abort(409, message="Not Found")
         
@@ -68,19 +68,7 @@ class Equipments(Resource):
         return equip_obj, 201
     
 
-post_args_person = reqparse.RequestParser()
-post_args_person.add_argument("args_person_firstname", type=str, required=True, help="firstname is required")
-post_args_person.add_argument("args_person_surname", type=str, required=True, help="surname is required")
-post_args_person.add_argument("args_phone_number", type=str)
-post_args_person.add_argument("args_email_address", type=str, required=True, help="email is required")
 
-
-person_resource_fields = {
-    'person_firstname' : fields.String,
-    'person_surname': fields.String,
-    'phone_number': fields.String,
-    'email_address': fields.String
-}
 
 class CheckPersons(Resource):
     def post(self):
@@ -93,10 +81,24 @@ class CheckPersons(Resource):
                 'emailExists': existing_person is not None
             }
             print(response_data)
-            return jsonify(response_data)
+            return jsonify( )
 
         except Exception as e:
             return jsonify({'error': str(e)}), 500
+
+"""post_args_person = reqparse.RequestParser()
+post_args_person.add_argument("args_person_firstname", type=str, required=True, help="firstname is required")
+post_args_person.add_argument("args_person_surname", type=str, required=True, help="surname is required")
+post_args_person.add_argument("args_phone_number", type=str)
+post_args_person.add_argument("args_email_address", type=str, required=True, help="email is required")
+
+
+person_resource_fields = {
+    'person_firstname' : fields.String,
+    'person_surname': fields.String,
+    'phone_number': fields.String,
+    'email_address': fields.String
+}
 
 class Persons(Resource):
     @marshal_with(person_resource_fields)
@@ -130,4 +132,45 @@ class Persons(Resource):
 
         except Exception as e:
             print('Error:', str(e))
-            return jsonify({'error': str(e)}), 500
+            return jsonify({'error': str(e)}), 500"""
+        
+
+
+post_args_student = reqparse.RequestParser()
+post_args_student.add_argument("args_student_number", type=str, required=True, help="student number is required")
+post_args_student.add_argument("args_student_department", type=str, required=True, help="student department is required")
+post_args_student.add_argument("args_student_year", type=str, required=True, help="student year is required")
+post_args_student.add_argument("args_student_section", type=str, required=True, help="student section is required")
+post_args_student.add_argument("args_student_email_address", type=str, required=True, help="student email address is required")
+post_args_student.add_argument("args_student_firstname", type=str, required=True, help="student firstname is required")
+post_args_student.add_argument("args_student_surname", type=str, required=True, help="student surname is required")
+
+student_resource_fields = {
+    'student_number':  fields.String,
+    'student_department': fields.String,
+    'student_year': fields.String,
+    'student_section':  fields.String,
+    'student_email_address': fields.String,
+    'student_firstname': fields.String,
+    'student_surname': fields.String
+}
+
+class Students(Resource):
+    @marshal_with(student_resource_fields)
+    def post(self):
+        args = post_args_student.parse_args()
+        student_obj = Student(
+            student_number=args['args_student_number'],
+                student_department=args['args_student_department'],
+                student_year=args['args_student_year'],
+                student_section=args['args_student_section'],
+                student_email_address=args['args_student_email_address'],
+                student_firstname=args['args_student_firstname'],
+                student_surname=args['args_student_surname']
+            )
+        db.session.add(student_obj)
+        db.session.commit()
+        print('Student added Successfully')
+        return student_obj, 201       
+        
+        

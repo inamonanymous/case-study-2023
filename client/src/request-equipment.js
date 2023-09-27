@@ -4,7 +4,7 @@ import PostStudentData from './post-student';
 
 function RequestEquipment() {
   // Get the equip_id parameter from the URL
-  const { equip_id } = useParams(); // Use the correct parameter name here
+  const { equip_unique_key } = useParams(); // Use the correct parameter name here
   const [items, setItems] = useState({
     equip_id: null,
     equip_type: null,
@@ -15,7 +15,7 @@ function RequestEquipment() {
 
   useEffect(() => {
     // Fetch data from the '/request-equipment/:equip_id' route
-    fetch(`/user/equipments/${equip_id}`)
+    fetch(`/user/equipments/${equip_unique_key}`)
       .then((response) => response.json())
       .then((data) => {
         // Update the state with the fetched data
@@ -24,7 +24,7 @@ function RequestEquipment() {
       .catch((error) => {
         console.error('Error fetching data:', error);
       });
-  }, [equip_id]);
+  }, [equip_unique_key]);
 
   return (
     <div>
@@ -38,7 +38,7 @@ function RequestEquipment() {
           <p>Pending: {items.is_pending ? 'Yes' : 'No'}</p>
 
           <div>
-            <PostStudentData />
+            <PostStudentData equipmentData={items} />
           </div>
         </div>
       ) : (

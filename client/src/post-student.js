@@ -2,12 +2,15 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-function PostStudentData({ onSubmit, userEmail }) {
+function PostStudentData({ equipmentData }) {
   const [formData, setFormData] = useState({
-    args_person_firstname: '',
-    args_person_surname: '',
-    args_phone_number: '',
-    args_email_address: userEmail, // Use the provided userEmail as the initial value
+    args_student_number: '',
+    args_student_section: '',
+    args_student_department: '',
+    args_student_year: '',
+    args_student_email_address: '', // Use the provided userEmail as the initial value
+    args_student_firstname: '', // Add a field for the student's first name
+    args_student_surname: '', // Add a field for the student's surname
   });
 
   const navigate = useNavigate();
@@ -21,22 +24,27 @@ function PostStudentData({ onSubmit, userEmail }) {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://127.0.0.1:5000/user/person', formData, {
-      headers: {
-        'Content-Type': 'application/json',
-      },});
+      const mergedData = {
+        ...formData,
+        ...equipmentData,
+      };
+
+      const response = await axios.post('http://127.0.0.1:5000/user/person/trial', mergedData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
       console.log('Response:', response);
+
       if (response.status === 201) {
-        console.log('Person data saved successfully');
-        console.log('Before navigate');
-        navigate('/dashboard'); 
-        console.log('After navigate');
+        console.log('Student data saved successfully');
+        navigate('/dashboard');
       } else {
-        console.error('Error saving user data:', response);
+        console.error('Error saving student data:', response);
       }
     } catch (error) {
-      
-      console.error('Error saving user data:', error);
+      console.error('Error saving student data:', error);
     }
   };
 
@@ -74,7 +82,6 @@ function PostStudentData({ onSubmit, userEmail }) {
             onChange={handleChange}
           />
         </div>
-        
         <div>
           <label htmlFor="args_student_year">Year:</label>
           <input
@@ -85,19 +92,37 @@ function PostStudentData({ onSubmit, userEmail }) {
             onChange={handleChange}
           />
         </div>
-
-          <div>
-            {/* Only render this if userEmail is provided */}
-            <label htmlFor="email_address">Email:</label>
-            <input
-              type="text"
-              id="email_address"
-              name="email_address"
-              value={userEmail}
-              disabled
-            />
-          </div>
-        
+        {/* Render these fields regardless of userEmail */}
+        <div>
+          <label htmlFor="args_student_email_address">Email:</label>
+          <input
+            type="text"
+            id="args_student_email_address"
+            name="args_student_email_address"
+            value={formData.args_student_email_address}
+            onChange={handleChange}
+          />
+        </div>
+        <div>
+          <label htmlFor="args_student_firstname">Firstname:</label>
+          <input
+            type="text"
+            id="args_student_firstname"
+            name="args_student_firstname"
+            value={formData.args_student_firstname}
+            onChange={handleChange}
+          />
+        </div>
+        <div>
+          <label htmlFor="args_student_surname">Surname:</label>
+          <input
+            type="text"
+            id="args_student_surname"
+            name="args_student_surname"
+            value={formData.args_student_surname}
+            onChange={handleChange}
+          />
+        </div>
         <button type="submit">Submit</button>
       </form>
     </div>

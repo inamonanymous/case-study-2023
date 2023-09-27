@@ -42,7 +42,7 @@ function AvailableItems() {
                     <td>{booleanToYesNo(items.is_available[index])}</td>
                     <td>{booleanToYesNo(items.is_pending[index])}</td>
                     <td>
-                    <Link to={`/request-equipment/${items.equip_id[index]}`}>
+                    <Link to={`/request-equipment/${items.equip_unique_key}`}>
                       <button>Borrow</button>
                     </Link>
                     </td>
