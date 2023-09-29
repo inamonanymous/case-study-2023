@@ -3,7 +3,7 @@ import os
 from flask_migrate import Migrate
 from dotenv import load_dotenv
 from flask_restful import Api
-from resource.user import ShowEquipments, Equipments, CheckPersons, Students
+from resource.user import ShowEquipments, Equipments,  Students, PendingItems
 from models.database import db
 from flask_cors import CORS
 
@@ -20,10 +20,9 @@ db.init_app(app)
 api = Api(app)
 
 api.add_resource(Students, '/user/student')
-api.add_resource(CheckPersons, '/user/check-person')
+api.add_resource(PendingItems, '/user/pending-items')
 api.add_resource(ShowEquipments, '/user/equipments/all')
 api.add_resource(Equipments, '/user/equipments/<string:unique_key>')
-#api.add_resource(Persons, '/user/person')
 
 @app.route('/', methods=['POST', 'GET'])
 def index():
@@ -33,6 +32,7 @@ def index():
 def trial():
     data = request.get_json()
     print(data)
+    
     return data
 
 if __name__ == "__main__":

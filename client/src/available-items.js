@@ -29,7 +29,7 @@ function AvailableItems() {
           <thead>
             <tr>
               <th>Type</th>
-              <th>Unique</th>
+              <th>Unique Key</th>
               <th>Available</th>
               <th>Pending</th>
             </tr>
@@ -42,7 +42,7 @@ function AvailableItems() {
                     <td>{booleanToYesNo(items.is_available[index])}</td>
                     <td>{booleanToYesNo(items.is_pending[index])}</td>
                     <td>
-                    <Link to={`/request-equipment/${items.equip_unique_key}`}>
+                    <Link to={`/request-equipment/${items.equip_unique_key[index]}`}>
                       <button>Borrow</button>
                     </Link>
                     </td>

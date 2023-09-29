@@ -39,6 +39,8 @@ class Student(db.Model):
     student_email_address = db.Column(db.String(45), nullable=False)
     student_firstname = db.Column(db.String(50), nullable=False)
     student_surname = db.Column(db.String(50), nullable=False)
+    requested_item=db.Column(db.String(50), nullable=False)
+    status=db.Column(db.String(15))
     
 
 class Admin(db.Model):

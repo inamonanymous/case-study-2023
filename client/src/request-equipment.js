@@ -30,7 +30,7 @@ function RequestEquipment() {
     <div>
       {items.equip_id !== null ? ( // Check if the data has been fetched
         <div>
-          <p><b>Equipment Details</b></p>
+          <h2>Equipment Details</h2>
           <p>Equipment ID: {items.equip_id}</p>
           <p>Equipment Type: {items.equip_type}</p>
           <p>Unique Key: {items.equip_unique_key}</p>
@@ -38,7 +38,7 @@ function RequestEquipment() {
           <p>Pending: {items.is_pending ? 'Yes' : 'No'}</p>
 
           <div>
-            <PostStudentData equipmentData={items} />
+            <PostStudentData args_requested_item={items.equip_unique_key} />
           </div>
         </div>
       ) : (
