@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block body %}
+    <form action="/signed-up" method="post">
+        <label for="admin_email_address">Email</label>
+        <input type="text" name="admin_email_address", id="admin_email_address">
+        <br>
+        <label for="admin_firstname">Firstname</label>
+        <input type="text" name="admin_firstname", id="admin_firstname">
+        <br>
+        <label for="admin_surname">Surname</label>
+        <input type="text" name="admin_surname", id="admin_surname">
+        <br>
+        <labl for="admin_username">Username</label>
+        <input type="text" name="admin_username", id="admin_username">
+        <br>
+        <label for="admin_password">Password</label>
+        <input type="text" name="admin_password", id="admin_password">
+        <br>
+        <label for="admin_password2">Re-enter Password</label>
+        <input type="text" name="admin_password2", id="admin_password2">
+        <br>
+        <button type="submit">Save</button>
+    </form>
+{% endblock %}

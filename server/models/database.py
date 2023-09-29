@@ -1,5 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
-
+from werkzeug.security import check_password_hash, generate_password_hash
 db = SQLAlchemy()
 
 class Equipment(db.Model): 
@@ -51,3 +51,15 @@ class Admin(db.Model):
     admin_email_address = db.Column(db.String(45), nullable=False)
     admin_firstname = db.Column(db.String(45), nullable=False)
     admin_surname = db.Column(db.String(45), nullable=False)
+###################################################################
+    def save(self, admin):
+        admin.password=generate_password_hash(admin.password)
+        db.session.add(admin)
+        db.session.commit()
+###################################################################
+    @classmethod
+    def check_login(cls, username, password):
+        admin_obj = cls.query.filter_by(admin_username=username).first()
+        return admin_obj and check_password_hash((admin_obj.admin_password), str(password))
+    
+
