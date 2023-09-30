@@ -21,11 +21,11 @@ class Pending(db.Model):
     is_verified = db.Column(db.Boolean, default=False)
 
 
-class Borrowed(Pending):
+class Borrowed(db.Model):
     __tablename__ = 'borrowed'
     borrow_id = db.Column(db.Integer, primary_key=True)
     time_quota = db.Column(db.Time)
-    is_verified = db.Column(db.Boolean, default=True)
+    is_returned = db.Column(db.Boolean, default=False)
     pending_id = db.Column(db.Integer, db.ForeignKey('pending.pending_id'), nullable=False)
 
 
@@ -47,16 +47,16 @@ class Admin(db.Model):
     __tablename__ = 'admin'
     admin_id = db.Column(db.Integer, primary_key=True)
     admin_username = db.Column(db.String(50), nullable=False, unique=True)
-    admin_password = db.Column(db.String(50), nullable=False)
+    admin_password = db.Column(db.String(255), nullable=False)
     admin_email_address = db.Column(db.String(45), nullable=False)
     admin_firstname = db.Column(db.String(45), nullable=False)
     admin_surname = db.Column(db.String(45), nullable=False)
-###################################################################
-    def save(self, admin):
-        admin.password=generate_password_hash(admin.password)
-        db.session.add(admin)
+
+    def save(self):
+        self.admin_password=generate_password_hash(self.admin_password)
+        db.session.add(self)
         db.session.commit()
-###################################################################
+
     @classmethod
     def check_login(cls, username, password):
         admin_obj = cls.query.filter_by(admin_username=username).first()

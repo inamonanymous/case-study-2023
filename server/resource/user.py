@@ -1,14 +1,8 @@
 from flask_restful import Resource, abort, fields, marshal_with, reqparse
 from flask import request, jsonify
-from models.database import db, Equipment, Student, Pending
+from models.database import db, Equipment, Student, Pending, Borrowed
 
-equipment_resource_fields = {
-    'equip_id' : fields.Integer,
-    'equip_type': fields.String,
-    'equip_unique_key': fields.String,
-    'is_available': fields.Boolean,
-    'is_pending': fields.Boolean
-}
+
 
 class ShowEquipments(Resource):
     def get(self):
@@ -35,6 +29,14 @@ post_args_equip.add_argument("args_equip_type", type=str, required=True, help="t
 post_args_equip.add_argument("args_equip_unique_key", type=str, required=True, help="unique_key is required")
 post_args_equip.add_argument("args_is_available", type=bool, required=True, help="is_available is required")
 post_args_equip.add_argument("args_is_pending", type=bool, required=True, help="is_pending is required")
+
+equipment_resource_fields = {
+    'equip_id' : fields.Integer,
+    'equip_type': fields.String,
+    'equip_unique_key': fields.String,
+    'is_available': fields.Boolean,
+    'is_pending': fields.Boolean
+}
 
 class Equipments(Resource):
     @marshal_with(equipment_resource_fields)
@@ -105,7 +107,7 @@ class Students(Resource):
                 requested_item=args['args_requested_item']
             )
         equip_obj = Equipment.query.filter_by(equip_unique_key=args['args_requested_item']).first()
-        if equip_obj.is_available:
+        if equip_obj.is_available and not equip_obj.is_pending:
             pending_obj = Pending(
                 equip_type=equip_obj.equip_type,
                 equip_unique_key=equip_obj.equip_unique_key,
@@ -124,7 +126,6 @@ class Students(Resource):
         else:       
             return {"message": "item not available"}, 418
         
-
 
 class PendingItems(Resource):
     def get(self):
@@ -146,3 +147,20 @@ class PendingItems(Resource):
         }
 
         return pending_items
+    
+class BorrowedItems(Resource):
+    def get(self):
+        borrowed = Borrowed.query.all()
+        borrow_id = [b.borrow_id for b in borrowed]
+        time_quota = [b.time_quota.strftime('%H:%M:%S') for b in borrowed]
+        is_returned = [b.is_returned for b in borrowed]
+        pending_id = [b.pending_id for b in borrowed]
+
+        borrowed_items = {
+            "borrow_id": borrow_id,
+            "time_quota": time_quota,
+            "is_returned": is_returned,
+            "pending_id": pending_id
+        }
+
+        return borrowed_items
