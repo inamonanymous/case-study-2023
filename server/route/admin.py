@@ -1,39 +1,103 @@
 from flask import Blueprint, render_template, request, url_for, session, flash, redirect
-from models.database import Admin, Pending, Student, Borrowed, Equipment, db 
+from models.database import Admin, Pending, Student, Borrowed, Equipment, db , Completed
 from werkzeug.security import check_password_hash, generate_password_hash
-from resource.user import PendingItems
+from resource.user import PendingItems, BorrowedItems
 import datetime
 
 admin_bp = Blueprint('admin', __name__)
 
 advance_datetime = datetime.datetime.now() + datetime.timedelta(hours=5)
 
+@admin_bp.route('/return/<int:id>')
+def return_item(id):
+    if 'admin_login' in session:
+        borrowed_obj = Borrowed.query.filter_by(pending_id=id).first()
+        pending_obj = Pending.query.filter_by(pending_id=id).first()
+        student_obj = Student.query.filter_by(requested_item=pending_obj.equip_unique_key).first()
+        equip_obj = Equipment.query.filter_by(equip_unique_key=pending_obj.equip_unique_key).first()
+        if borrowed_obj.is_claimed and not borrowed_obj.is_returned:
+            borrowed_obj.is_claimed = False
+            borrowed_obj.is_returned = True
+            student_obj.status = 'returned'
+            completed_obj = Completed(
+                student_number = student_obj.student_number,
+                student_department = student_obj.student_department,
+                student_name = f"{student_obj.student_surname}, {student_obj.student_firstname}",
+                equip_type = pending_obj.equip_type,
+                equip_unique_key = pending_obj.equip_unique_key
+            )
+            equip_obj.is_available = True
+            equip_obj.is_pending = False
+            db.session.add(completed_obj)
+            db.session.delete(student_obj)
+            db.session.delete(pending_obj)
+            db.session.delete(borrowed_obj)
+            db.session.commit()
+            return redirect(url_for('admin.dashboard'))
+        return f"item already returned"
+    return redirect(url_for('index'))
+
+@admin_bp.route('/claim/<int:id>')
+def claim_item(id):
+    if 'admin_login' in session:
+        borrowed_obj = Borrowed.query.filter_by(pending_id=id).first()
+        pending_obj = Pending.query.filter_by(pending_id=id).first()
+        student_obj = Student.query.filter_by(requested_item=pending_obj.equip_unique_key).first()
+        if not borrowed_obj.is_claimed and not borrowed_obj.is_returned:
+            borrowed_obj.is_claimed = True
+            student_obj.status = 'claimed'
+            db.session.commit()
+            return redirect(url_for('admin.dashboard'))
+        return f"item already claimed"
+    return redirect(url_for('index'))
+
+@admin_bp.route('/borrowed-items', methods=['POST', 'GET'])
+def borrowed_items():
+    if 'admin_login' in session:
+        b_items = BorrowedItems()
+        borrowed = b_items.get()
+        return render_template('borrowed-items.html', borrowed=borrowed)
+    return redirect(url_for('index'))
+
+#verify requested item and pass it to borrowed items
 @admin_bp.route('/verify/<string:unique>')
 def verify_item(unique):
-    pending_obj = Pending.query.filter_by(equip_unique_key=unique).first()
-    student_obj = Student.query.filter_by(requested_item=unique).first()
-    if not pending_obj.is_verified:
-        pending_obj.is_verified=1
-        student_obj.status = 'to-receive'
-        borrowed_obj = Borrowed(
-            time_quota=advance_datetime,
-            is_returned=0,
-            pending_id=pending_obj.pending_id
-        )
-        db.session.add(borrowed_obj)
-        db.session.commit()
-        return f"{borrowed_obj.time_quota}"
-    
-    return f"{pending_obj}"
+    if 'admin_login' in session:
+        pending_obj = Pending.query.filter_by(equip_unique_key=unique).first()
+        student_obj = Student.query.filter_by(requested_item=unique).first()
+        if not pending_obj.is_verified:
+            pending_obj.is_verified=1
+            student_obj.status = 'to-receive'
+            borrowed_obj = Borrowed(
+                time_quota=advance_datetime,
+                is_returned=0,
+                pending_id=pending_obj.pending_id
+            )
+            db.session.add(borrowed_obj)
+            db.session.commit()
+            return f"{borrowed_obj.time_quota}"
+        
+        return f"{pending_obj}"
+    return redirect(url_for('admin.dashboard'))
 
-@admin_bp.route('/dashboard', methods=['POST', 'GET'])
-def dashboard():
+#render the pending items student requested
+@admin_bp.route('/pending-items', methods=['POST', 'GET'])
+def pending_items():
     if 'admin_login' in session:
         p_items = PendingItems()
         pending = p_items.get()
-        return render_template('dashboard.html', pending=pending)
+        return render_template('pending-items.html', pending=pending)
     return redirect(url_for('index'))
 
+#dashboard route
+@admin_bp.route('/dashboard', methods=['POST', 'GET'])
+def dashboard():
+    if 'admin_login' in session:
+        unverified = Pending.query.filter_by(is_verified=False).count()
+        return render_template('dashboard.html', unverified=unverified)
+    return redirect(url_for('index'))
+
+#check if log in is true
 @admin_bp.route('/logged-in', methods=['POST', 'GET'])
 def logged_in():
     username, password = request.form.get('input_username').strip(), request.form.get('input_password').strip()

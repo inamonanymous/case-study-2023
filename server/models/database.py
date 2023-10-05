@@ -25,6 +25,7 @@ class Borrowed(db.Model):
     __tablename__ = 'borrowed'
     borrow_id = db.Column(db.Integer, primary_key=True)
     time_quota = db.Column(db.Time)
+    is_claimed = db.Column(db.Boolean, default=False)
     is_returned = db.Column(db.Boolean, default=False)
     pending_id = db.Column(db.Integer, db.ForeignKey('pending.pending_id'), nullable=False)
 
@@ -63,3 +64,11 @@ class Admin(db.Model):
         return admin_obj and check_password_hash((admin_obj.admin_password), str(password))
     
 
+class Completed(db.Model):
+    __tablename__ = 'completed'
+    completed_id = db.Column(db.Integer, primary_key=True)
+    student_number = db.Column(db.String(20), nullable=False)
+    student_department = db.Column(db.String(45), nullable=False)
+    student_name = db.Column(db.String(100), nullable=False)
+    equip_type = db.Column(db.String(50), nullable=False)
+    equip_unique_key = db.Column(db.String(50), nullable=False)

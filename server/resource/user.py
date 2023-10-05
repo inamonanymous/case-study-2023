@@ -153,12 +153,14 @@ class BorrowedItems(Resource):
         borrowed = Borrowed.query.all()
         borrow_id = [b.borrow_id for b in borrowed]
         time_quota = [b.time_quota.strftime('%H:%M:%S') for b in borrowed]
+        is_claimed = [b.is_claimed for b in borrowed]
         is_returned = [b.is_returned for b in borrowed]
         pending_id = [b.pending_id for b in borrowed]
 
         borrowed_items = {
             "borrow_id": borrow_id,
             "time_quota": time_quota,
+            "is_claimed": is_claimed,
             "is_returned": is_returned,
             "pending_id": pending_id
         }

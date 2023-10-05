@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+{% block body %} 
+<table>
+    <thead>
+        <th>
+            Pending Id
+        </th>
+        <th>
+            Equipment Type
+        </th>
+        <th>
+            Equipment Unique Key
+        </th>
+        <th>
+            Student Number
+        </th>
+        <th>
+            Student Name
+        </th>
+        <th>
+            Verify Status
+        </th>
+    </thead>
+
+    <tbody>
+        {% for index in range(pending['pending_id']|length) %}
+        <tr>
+            <td>{{ pending['pending_id'][index] }}</td>
+            <td>{{ pending['equip_type'][index] }}</td>
+            <td>{{ pending['equip_unique_key'][index] }}</td>
+            <td>{{ pending['student_number'][index] }}</td>
+            <td>{{ pending['student_name'][index] }}</td>
+            <td>{{ pending['is_verified'][index] }}</td>
+            <td>
+                <a href="{{ url_for('admin.verify_item', unique=pending['equip_unique_key'][index]) }}">
+                
+                    <button>Verify</button>
+                </a>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    
+</table>
+<a href="{{ url_for('admin.dashboard') }}">
+    <button>Back</button>
+</a>
+{% endblock %}

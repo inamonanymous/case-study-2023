@@ -8,6 +8,7 @@ function BorrowedItems() {
     const [items, setItems] = useState({
       borrow_id: [],
       time_quota: [],
+      is_claimed: [],
       is_returned: [],
       pending_id: []});
 
@@ -32,8 +33,9 @@ function BorrowedItems() {
             <tr>
               <th>Borrow Id</th>
               <th>Time Quota</th>
+              <th>Claimed Staus</th>
               <th>Return Status</th>
-              <th>Pending</th>
+              <th>Pending Id</th>
             </tr>
           </thead>
           <tbody>
@@ -41,7 +43,8 @@ function BorrowedItems() {
                 <tr key={index}>
                     <td>{borrow_id}</td>
                     <td>{items.time_quota[index]}</td>
-                    <td>{items.is_returned[index]}</td>
+                    <td>{booleanToYesNo(items.is_claimed[index])}</td>
+                    <td>{booleanToYesNo(items.is_returned[index])}</td>
                     <td>{items.pending_id[index]}</td>
                 </tr>
             ))}

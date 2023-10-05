@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+{% block body %}
+<table>
+    <thead>
+        <th>
+            Borrow Id
+        </th>
+        <th>
+            Time Quota
+        </th>
+        <th>
+            Claim Status
+        </th>
+        <th>
+            Return Status
+        </th>
+        <th>
+            Pending Id
+        </th>
+    </thead>
+
+    <tbody>
+        {% for index in range(borrowed['borrow_id']|length) %}
+        <tr>
+            <td>{{ borrowed['pending_id'][index] }}</td>
+            <td>{{ borrowed['time_quota'][index] }}</td>
+            <td>{{ borrowed['is_claimed'][index] }}</td>
+            <td>{{ borrowed['is_returned'][index] }}</td>
+            <td>{{ borrowed['pending_id'][index] }}</td>
+            <td>
+                <a href="{{ url_for('admin.claim_item', id=borrowed['pending_id'][index]) }}">
+                    <button>Claimed</button>
+                </a>
+            </td>
+            <td>
+                <a href="{{ url_for('admin.return_item', id=borrowed['pending_id'][index]) }}">
+                    <button>Returned</button>
+                </a>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    
+</table>
+<a href="{{ url_for('admin.dashboard') }}">
+    <button>Back</button>
+</a>
+{% endblock %}
