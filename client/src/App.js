@@ -7,6 +7,7 @@ import BorrowedItems from './borrowed-items';
 import AvailableItems from './available-items';
 import PendingItems from './pending-items';
 import RequestEquipment from './request-equipment';
+import CompletedItems from './completed-items';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/borrowed-items" element={<BorrowedItems />} />
         <Route path="/available-items" element={<AvailableItems />} />
         <Route path="/pending-items" element={<PendingItems />} />
+        <Route path="/completed-items" element={<CompletedItems />} />
         <Route path="/request-equipment/:equip_unique_key" element={<RequestEquipment />} />
       </Routes>
     </Router>

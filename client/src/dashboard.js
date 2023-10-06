@@ -17,6 +17,9 @@ function Dashboard() {
         <Link to="/pending-items">
           <button>Display Pending equipments</button>
         </Link>
+        <Link to="/completed-items">
+          <button>Display transaction history</button>
+        </Link>
       </div>
     </div>
   );

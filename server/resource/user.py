@@ -1,6 +1,6 @@
 from flask_restful import Resource, abort, fields, marshal_with, reqparse
 from flask import request, jsonify
-from models.database import db, Equipment, Student, Pending, Borrowed
+from models.database import db, Equipment, Student, Pending, Borrowed, Completed
 
 
 
@@ -152,7 +152,7 @@ class BorrowedItems(Resource):
     def get(self):
         borrowed = Borrowed.query.all()
         borrow_id = [b.borrow_id for b in borrowed]
-        time_quota = [b.time_quota.strftime('%H:%M:%S') for b in borrowed]
+        time_quota = [b.time_quota.strftime('%H:%M:%S') if b.time_quota is not None else None for b in borrowed]
         is_claimed = [b.is_claimed for b in borrowed]
         is_returned = [b.is_returned for b in borrowed]
         pending_id = [b.pending_id for b in borrowed]
@@ -166,3 +166,25 @@ class BorrowedItems(Resource):
         }
 
         return borrowed_items
+    
+
+class CompletedItems(Resource):
+    def get(self):
+        completed = Completed.query.all()
+        completed_id = [c.completed_id for c in completed]
+        student_number = [c.student_number for c in completed]
+        student_department = [c.student_department for c in completed]
+        student_name = [c.student_name for c in completed]
+        equip_type = [c.equip_type for c in completed]
+        equip_unique_key = [c.equip_unique_key for c in completed]
+
+        completed_items = {
+            "completed_id": completed_id,
+            "student_number": student_number,
+            "student_department": student_department,
+            "student_name": student_name,
+            "equip_type": equip_type,
+            "equip_unique_key": equip_unique_key
+        }
+
+        return completed_items

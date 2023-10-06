@@ -1,12 +1,20 @@
 from flask import Blueprint, render_template, request, url_for, session, flash, redirect
 from models.database import Admin, Pending, Student, Borrowed, Equipment, db , Completed
 from werkzeug.security import check_password_hash, generate_password_hash
-from resource.user import PendingItems, BorrowedItems
+from resource.user import PendingItems, BorrowedItems, CompletedItems
 import datetime
 
 admin_bp = Blueprint('admin', __name__)
 
 advance_datetime = datetime.datetime.now() + datetime.timedelta(hours=5)
+
+@admin_bp.route('/completed-items', methods=['GET'])
+def completed_items():
+    if 'admin_login' in session:
+        c_items = CompletedItems()
+        completed_items = c_items.get()
+        return render_template('completed-items.html', completed=completed_items)
+    return redirect(url_for('index'))
 
 @admin_bp.route('/return/<int:id>')
 def return_item(id):
@@ -45,6 +53,7 @@ def claim_item(id):
         student_obj = Student.query.filter_by(requested_item=pending_obj.equip_unique_key).first()
         if not borrowed_obj.is_claimed and not borrowed_obj.is_returned:
             borrowed_obj.is_claimed = True
+            borrowed_obj.time_quota = advance_datetime
             student_obj.status = 'claimed'
             db.session.commit()
             return redirect(url_for('admin.dashboard'))
@@ -69,16 +78,16 @@ def verify_item(unique):
             pending_obj.is_verified=1
             student_obj.status = 'to-receive'
             borrowed_obj = Borrowed(
-                time_quota=advance_datetime,
+                time_quota=None,
                 is_returned=0,
                 pending_id=pending_obj.pending_id
             )
             db.session.add(borrowed_obj)
             db.session.commit()
-            return f"{borrowed_obj.time_quota}"
+            return redirect(url_for('admin.dashboard'))
         
-        return f"{pending_obj}"
-    return redirect(url_for('admin.dashboard'))
+        return f"Student already Verified"
+    return redirect(url_for('index'))
 
 #render the pending items student requested
 @admin_bp.route('/pending-items', methods=['POST', 'GET'])

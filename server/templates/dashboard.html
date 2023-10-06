@@ -9,8 +9,13 @@
     <button>Borrowed Items</button>
 </a>
 
+<a href="{{ url_for('admin.completed_items') }}">
+    <button>Borrow History</button>
+</a>
+
 <a href="{{ url_for('index') }}">
     <button>Logout</button>
 </a>
+
 
 {% endblock %}

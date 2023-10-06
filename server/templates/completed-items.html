@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+{% block body %}
+<table>
+    <thead>
+        <th>
+            Completed Id
+        </th>
+        <th>
+            Student Number
+        </th>
+        <th>
+            Student Department
+        </th>
+        <th>
+            Student Name
+        </th>
+        <th>
+            Equipment Type
+        </th>
+        <th>
+            Equipment Unique Key
+        </th>
+    </thead>
+
+    <tbody>
+        {% for index in range(completed['completed_id']|length) %}
+        <tr>
+            <td>{{ completed['completed_id'][index] }}</td>
+            <td>{{ completed['student_number'][index] }}</td>
+            <td>{{ completed['student_department'][index] }}</td>
+            <td>{{ completed['student_name'][index] }}</td>
+            <td>{{ completed['equip_type'][index] }}</td>
+            <td>{{ completed['equip_unique_key'][index] }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+    
+</table>
+<a href="{{ url_for('admin.dashboard') }}">
+    <button>Back</button>
+</a>
+{% endblock %}
