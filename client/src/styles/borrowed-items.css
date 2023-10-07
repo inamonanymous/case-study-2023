@@ -1,0 +1,65 @@
+/* borrowed-items.css */
+
+.borrowed-items-background {
+    /* Other background styles here */
+    padding: 20px;
+    height: 100vh; /* Set height to 100% of the viewport height */
+    overflow: hidden; /* Hide overflow to prevent scrolling */
+  }
+  
+  .background-image {
+    background-image: url('/src/img/borrowed-items-background-img.png'); /* Replace with the actual path to your image */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 100%; /* Set height to 100% of the parent (viewport) */
+    width: 100%; /* Set width to 100% of the parent (viewport) */
+    position: absolute; /* Position the background image absolutely */
+    top: 0;
+    left: 0;
+  }
+  
+  .full-screen {
+    height: 100vh; /* Set height to 100% of the viewport height */
+    width: 100%; /* Set width to 100% of the viewport width */
+  }
+  
+  .container {
+    margin-top: 20px;
+  }
+  
+  .custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: rgba(255, 255, 0, 0.8); /* Yellow with 80% opacity */
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  }
+  
+  .custom-table th,
+  .custom-table td {
+    padding: 8px 12px;
+    text-align: center;
+  }
+  
+  .custom-table th {
+    background-color: rgba(245, 245, 245, 0.8); /* Light gray with 80% opacity for table headers */
+  }
+  
+  .btn-primary {
+    background-color: #007bff;
+    color: white;
+    border: none;
+  }
+  
+  .btn-primary:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Optional: To make the table responsive on smaller screens */
+  @media (max-width: 768px) {
+    .custom-table {
+      font-size: 14px;
+    }
+  }
+  

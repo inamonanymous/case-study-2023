@@ -1,18 +1,20 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import './styles/greetings.css';
 
-function Dashboard() {
-
-
+function Greeting() {
   return (
-    <div>
-      <h1>Welcome to the website</h1>
-
-      <Link to="/dashboard">
-        <button>Dashboard</button>
-      </Link>
+    
+    <div className='greetings-container'>
+      <h1 className='greetings-header'>Welcome to the website</h1>
+      <div className='button-container'>
+        <Link to="/dashboard">
+          <button className='dashboard-button'>Dashboard</button>
+        </Link>
+      </div>
     </div>
+    
   );
 }
 
-export default Dashboard;
+export default Greeting;

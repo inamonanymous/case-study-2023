@@ -1,0 +1,35 @@
+/* dashboard.css */
+
+/* Apply background image to the entire container */
+.dashboard-background {
+  background-image: url('/src/img/background-image.png');
+  background-size: cover; /* Adjust the size as needed */
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center center;
+
+  /* Set the height of the container to 100% of the viewport height */
+  height: 100vh;
+
+  /* Center content vertically and horizontally using flexbox */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Additional styling for the content */
+.display-4 {
+  font-size: 2.5rem; /* Adjust font size as needed */
+  margin-bottom: 20px;
+}
+
+.lead {
+  font-size: 1.25rem; /* Adjust font size as needed */
+  margin-bottom: 30px;
+}
+
+/* Style buttons as needed */
+.btn {
+  font-size: 1rem; /* Adjust font size as needed */
+  margin-top: 10px;
+}
