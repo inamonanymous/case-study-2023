@@ -17,7 +17,7 @@
   </li>
   
   <li>
-    Full-stack Programmer: Stephen Aguilar <i>3rd Year B.S.I.T.</i>
+    Head Programmer: Stephen Aguilar <i>3rd Year B.S.I.T.</i>
   </li>
     
 </ul>
