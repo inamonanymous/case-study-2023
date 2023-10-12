@@ -1,0 +1,70 @@
+/* RequestEquipment.css */
+.request-equipment {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.equipment-details {
+  margin-bottom: 20px;
+}
+
+h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+tr {
+  border-bottom: 1px solid #ccc;
+}
+
+td {
+  padding: 10px;
+}
+
+.equipment-details h3 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.student-data-form {
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.student-data-form h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.link-button {
+  text-decoration: none;
+  color: white;
+}

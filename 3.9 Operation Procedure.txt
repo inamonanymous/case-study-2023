@@ -1,0 +1,51 @@
+3.9 Operation Procedure
+
+This section outlines the operational procedures and protocols that govern the use and management of the system. It provides a comprehensive guide for users and administrators on how to navigate the system, perform essential tasks, and ensure the smooth operation of the software.
+
+3.9.1 User Access
+
+Access to the system is designed to be user-friendly and straightforward. As previously discussed (3.3.3), students can access the system without the need for user accounts. They are immediately directed to the dashboard, where they can perform various actions.
+
+3.9.2 Dashboard Navigation
+
+Upon accessing the dashboard, users are presented with three primary options:
+
+Show Borrowed Items: This section allows users to view the list of sports equipment they have borrowed.
+
+Show Available Items: Users can explore the inventory of available sports equipment and initiate borrowing requests.
+
+Show Pending Items: This section provides transparency regarding pending sports equipment requests that are awaiting approval by the administrator.
+
+3.9.3 Borrowing Procedure for Students
+
+For students looking to borrow sports equipment:
+
+Select "Show Available Items" on the dashboard.
+
+Choose the desired item from the available inventory.
+
+Complete the student information form, which may include necessary details such as name, contact information, and any additional requirements.
+
+Submit the borrowing request.
+
+3.9.4 Administrator Responsibilities
+
+Admins have distinct responsibilities within the system, which include:
+
+Reviewing and approving or rejecting borrowing requests from students.
+
+Managing the status of sports equipment, marking them as "Returned" or "Claimed" as needed.
+
+3.9.5 System Security
+
+System security measures are in place to safeguard data and ensure the integrity of the system. This includes authentication mechanisms for administrators to access their accounts securely and encryption of sensitive data.
+
+3.9.6 Troubleshooting and Support
+
+In case users encounter issues or require assistance, a dedicated support channel is available. Users can reach out to the support team for prompt resolution of problems and guidance on system usage.
+
+3.9.7 Regular Maintenance
+
+Routine maintenance tasks, including database backups and software updates, are scheduled to ensure the system's reliability and performance.
+
+This operational procedure guide provides a comprehensive overview of how users can interact with the system and how administrators are responsible for overseeing and managing requests. It also underscores the importance of system security, support channels, and regular maintenance to ensure the system's seamless operation.

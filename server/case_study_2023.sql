@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 30, 2023 at 11:03 PM
+-- Generation Time: Oct 12, 2023 at 10:23 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -70,17 +70,51 @@ INSERT INTO `alembic_version` (`version_num`) VALUES
 CREATE TABLE `borrowed` (
   `borrow_id` int(11) NOT NULL,
   `time_quota` time DEFAULT NULL,
+  `is_claimed` tinyint(1) NOT NULL,
   `is_returned` tinyint(1) DEFAULT NULL,
   `pending_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- --------------------------------------------------------
+
 --
--- Dumping data for table `borrowed`
+-- Table structure for table `completed`
 --
 
-INSERT INTO `borrowed` (`borrow_id`, `time_quota`, `is_returned`, `pending_id`) VALUES
-(12, '08:43:24', 0, 7),
-(13, '08:43:24', 0, 8);
+CREATE TABLE `completed` (
+  `completed_id` int(11) NOT NULL,
+  `student_number` varchar(20) NOT NULL,
+  `student_department` varchar(45) NOT NULL,
+  `student_name` varchar(100) NOT NULL,
+  `equip_type` varchar(50) NOT NULL,
+  `equip_unique_key` varchar(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `completed`
+--
+
+INSERT INTO `completed` (`completed_id`, `student_number`, `student_department`, `student_name`, `equip_type`, `equip_unique_key`) VALUES
+(1, 'AY-2021-00999', 'IT', 'pacana, rv', 'badminton', 'nikjhgasdf'),
+(2, 'AY-2021-00314', 'CS', 'example, example', 'tennis', 'oafneuqfjsa'),
+(3, 'fhadsjfhbasdjfhbhiwa', 'CS', 'Aguilar Ganjaman, Joaquin Pogi', 'basketball', 'anjishije'),
+(5, 'qqq', 'q', 'q, q', 'badminton', 'nikjhgasdf'),
+(6, 'AY2021-00752', 'IT', 'Aguilar, Stephen ', 'basketball', 'anjishije'),
+(7, 'AY-2021-00813', 'PYSCH', 'logy, psycho', 'basketball', 'anjishije'),
+(8, 'ksdhf', 'knasdf', 'skjdfnas, asknfdjn', 'badminton', 'nikjhgasdf'),
+(9, 'aa', 'aa', 'aa, aa', 'volleyball', 'ghyuewoa'),
+(10, 'aaaasdafadsf', 'aa', 'aa, aa', 'basketball', 'anjishije'),
+(11, 'asdasd', 'asdasd', 'dasdasd, dasdasd', 'basketball', 'anjishije'),
+(12, 'Hannah', '', ', ', 'volleyball', 'ghyuewoa'),
+(13, 'asdasd', 'dasda', 'dd, dsas', 'badminton', 'nikjhgasdf'),
+(14, 'sajdnu', 'fjsdihg', 'psoidfu, spoiyfu', 'basketball', 'anjishije'),
+(15, 'lasdfn', ';sldkjf', 'sdiljfh, sofhu', 'tennis', 'oafneuqfjsa'),
+(16, 'exampleunique', '', ', ', 'volleyball', 'ghyuewoa'),
+(17, 'AY2021-00752', '', ', ', 'basketball', 'anjishije'),
+(18, 'AY2021-00123', 'IT', 'Rose, Derrick ', 'badminton', 'nikjhgasdf'),
+(19, 'sdkflmsdlkfq', 'mfsdklmsdlk', 'asdfdsaf, asdadsf', 'volleyball', 'ghyuewoa'),
+(20, 'AY2021-00752', 'IT', 'Aguilar, Stephen', 'basketball', 'anjishije'),
+(21, 'AY2021-0052`', 'Testing', 'Testing, Testting', 'badminton', 'nikjhgasdf');
 
 -- --------------------------------------------------------
 
@@ -101,9 +135,9 @@ CREATE TABLE `equipment` (
 --
 
 INSERT INTO `equipment` (`equip_id`, `equip_type`, `equip_unique_key`, `is_available`, `is_pending`) VALUES
-(2, 'basketball', 'anjishije', 0, 1),
+(2, 'basketball', 'anjishije', 1, 0),
 (3, 'badminton', 'nikjhgasdf', 1, 0),
-(4, 'volleyball', 'ghyuewoa', 0, 1),
+(4, 'volleyball', 'ghyuewoa', 1, 0),
 (5, 'tennis', 'oafneuqfjsa', 1, 0);
 
 -- --------------------------------------------------------
@@ -120,14 +154,6 @@ CREATE TABLE `pending` (
   `student_name` varchar(50) NOT NULL,
   `is_verified` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `pending`
---
-
-INSERT INTO `pending` (`pending_id`, `equip_type`, `equip_unique_key`, `student_number`, `student_name`, `is_verified`) VALUES
-(7, 'volleyball', 'ghyuewoa', 'AY-2021-00752', 'Aguilar, Stephen Joaquin', 1),
-(8, 'basketball', 'anjishije', 'sampl', 'sample, sample', 1);
 
 -- --------------------------------------------------------
 
@@ -147,14 +173,6 @@ CREATE TABLE `student` (
   `requested_item` varchar(50) NOT NULL,
   `status` varchar(15) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `student`
---
-
-INSERT INTO `student` (`student_id`, `student_number`, `student_section`, `student_department`, `student_year`, `student_email_address`, `student_firstname`, `student_surname`, `requested_item`, `status`) VALUES
-(11, 'AY-2021-00752', '3a3', 'IT', '3rd', 'stephenonline25@gmail.com', 'Stephen Joaquin', 'Aguilar', 'ghyuewoa', 'to-receive'),
-(12, 'sampl', 'sample', 'samp[le', 'sample', 'sample', 'sample', 'sample', 'anjishije', 'to-receive');
 
 --
 -- Indexes for dumped tables
@@ -179,6 +197,12 @@ ALTER TABLE `alembic_version`
 ALTER TABLE `borrowed`
   ADD PRIMARY KEY (`borrow_id`),
   ADD KEY `pending_id` (`pending_id`);
+
+--
+-- Indexes for table `completed`
+--
+ALTER TABLE `completed`
+  ADD PRIMARY KEY (`completed_id`);
 
 --
 -- Indexes for table `equipment`
@@ -215,7 +239,13 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `borrowed`
 --
 ALTER TABLE `borrowed`
-  MODIFY `borrow_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `borrow_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+
+--
+-- AUTO_INCREMENT for table `completed`
+--
+ALTER TABLE `completed`
+  MODIFY `completed_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `equipment`
@@ -227,13 +257,13 @@ ALTER TABLE `equipment`
 -- AUTO_INCREMENT for table `pending`
 --
 ALTER TABLE `pending`
-  MODIFY `pending_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `pending_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT for table `student`
 --
 ALTER TABLE `student`
-  MODIFY `student_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `student_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- Constraints for dumped tables

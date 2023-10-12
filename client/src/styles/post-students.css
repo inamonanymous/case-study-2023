@@ -1,0 +1,62 @@
+/* PostStudentData.css */
+.post-student-data {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 2px solid #007bff; /* Updated border color */
+  border-radius: 10px; /* Increased border radius */
+  background-color: #f9f9f9; /* Light gray background */
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2); /* Slightly increased shadow */
+}
+
+h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #007bff; /* Heading color */
+}
+
+.form-group {
+  margin-bottom: 20px; /* Increased margin */
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 10px; /* Increased margin */
+  color: #555; /* Label text color */
+}
+
+input[type="text"] {
+  width: 90%;
+  padding: 12px; /* Increased padding */
+  border: 2px solid #ccc;
+  border-radius: 5px; /* Slightly increased border radius */
+  color: #333; /* Input text color */
+}
+
+button[type="submit"] {
+  background-color: #007bff;
+  color: #fff;
+  padding: 12px 20px; /* Increased padding */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s; /* Smooth background color transition */
+}
+
+button[type="submit"]:hover {
+  background-color: #0056b3; /* Hover color */
+}
+
+.error-message {
+  color: #ff0000;
+  margin-top: 15px; /* Increased margin */
+  font-weight: bold;
+}
+
+/* Additional style for success message */
+.success-message {
+  color: #00a82c; /* Green color for success message */
+  margin-top: 15px;
+  font-weight: bold;
+}

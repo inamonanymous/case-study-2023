@@ -97,14 +97,14 @@ class Students(Resource):
     def post(self):
         args = post_args_student.parse_args()
         student_obj = Student(
-                student_number=args['args_student_number'],
-                student_department=args['args_student_department'],
-                student_year=args['args_student_year'],
-                student_section=args['args_student_section'],
-                student_email_address=args['args_student_email_address'],
-                student_firstname=args['args_student_firstname'],
-                student_surname=args['args_student_surname'],
-                requested_item=args['args_requested_item']
+                student_number=args['args_student_number'].strip(),
+                student_department=args['args_student_department'].strip(),
+                student_year=args['args_student_year'].strip(),
+                student_section=args['args_student_section'].strip(),
+                student_email_address=args['args_student_email_address'].strip(),
+                student_firstname=args['args_student_firstname'].strip(),
+                student_surname=args['args_student_surname'].strip(),
+                requested_item=args['args_requested_item'].strip()
             )
         equip_obj = Equipment.query.filter_by(equip_unique_key=args['args_requested_item']).first()
         if equip_obj.is_available and not equip_obj.is_pending:

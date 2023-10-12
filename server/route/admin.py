@@ -41,8 +41,8 @@ def return_item(id):
             db.session.delete(pending_obj)
             db.session.delete(borrowed_obj)
             db.session.commit()
-            return redirect(url_for('admin.dashboard'))
-        return f"item already returned"
+            return redirect(url_for('admin.borrowed_items'))
+        return f"It is either the Item isn't Claimed or Returned"
     return redirect(url_for('index'))
 
 @admin_bp.route('/claim/<int:id>')
@@ -56,8 +56,8 @@ def claim_item(id):
             borrowed_obj.time_quota = advance_datetime
             student_obj.status = 'claimed'
             db.session.commit()
-            return redirect(url_for('admin.dashboard'))
-        return f"item already claimed"
+            return redirect(url_for('admin.borrowed_items'))
+        return f"It is either the Item isn't Claimed or Returned"
     return redirect(url_for('index'))
 
 @admin_bp.route('/borrowed-items', methods=['POST', 'GET'])
@@ -84,7 +84,7 @@ def verify_item(unique):
             )
             db.session.add(borrowed_obj)
             db.session.commit()
-            return redirect(url_for('admin.dashboard'))
+            return redirect(url_for('admin.pending_items'))
         
         return f"Student already Verified"
     return redirect(url_for('index'))

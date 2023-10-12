@@ -1,6 +1,16 @@
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import PostStudentData from './post-student';
+import './styles/request-equipment.css'
+
+function EquipmentRow({ label, value }) {
+  return (
+      <tr>
+          <td>{label}</td>
+          <td>{value}</td>
+      </tr>
+  );
+}
 
 function RequestEquipment() {
   // Get the equip_id parameter from the URL
@@ -27,24 +37,31 @@ function RequestEquipment() {
   }, [equip_unique_key]);
 
   return (
-    <div>
-      {items.equip_id !== null ? ( // Check if the data has been fetched
-        <div>
-          <h2>Equipment Details</h2>
-          <p>Equipment ID: {items.equip_id}</p>
-          <p>Equipment Type: {items.equip_type}</p>
-          <p>Unique Key: {items.equip_unique_key}</p>
-          <p>Available: {items.is_available ? 'Yes' : 'No'}</p>
-          <p>Pending: {items.is_pending ? 'Yes' : 'No'}</p>
-
+      <div className="request-equipment">
+          {items.equip_id !== null ? (
+              <div className="equipment-details">
+                  <h2>Equipment Details</h2>
+                  <table>
+                      <tbody>
+                          <EquipmentRow label="Equipment ID:" value={items.equip_id} />
+                          <EquipmentRow label="Equipment Type:" value={items.equip_type} />
+                          <EquipmentRow label="Unique Key:" value={items.equip_unique_key} />
+                          <EquipmentRow label="Available:" value={items.is_available ? 'Yes' : 'No'} />
+                          <EquipmentRow label="Pending:" value={items.is_pending ? 'Yes' : 'No'} />
+                      </tbody>
+                  </table>
+                  <div className="student-data-form">
+                      <h3>Submit Student Information</h3>
+                      <PostStudentData args_requested_item={items.equip_unique_key} />
+                  </div>
+              </div>
+          ) : (
+              <p>Loading...</p>
+          )}
           <div>
-            <PostStudentData args_requested_item={items.equip_unique_key} />
+            
           </div>
-        </div>
-      ) : (
-        <p>Loading...</p>
-      )}
-    </div>
+      </div>
   );
 }
 

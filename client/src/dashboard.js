@@ -1,37 +1,51 @@
 // src/Dashboard.js
-import React from 'react';
-import { Link } from 'react-router-dom';
-import './styles/dashboard.css'; // Import the CSS specific to the Dashboard component
-import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
+import React, { useState } from 'react';
+import BorrowedItems from './borrowed-items';
+import AvailableItems from './available-items';
+import PendingItems from './pending-items';
+import CompletedItems from './completed-items';
+import './styles/dashboard.css';
 
 function Dashboard() {
+  const [selectedContent, setSelectedContent] = useState(null);
+
+  const contentComponents = {
+    'borrowed-items': <BorrowedItems />,
+    'available-items': <AvailableItems />,
+    'pending-items': <PendingItems />,
+    'completed-items': <CompletedItems />,
+  };
+
+  const renderContent = () => {
+    return selectedContent ? contentComponents[selectedContent] : <div>Welcome to the dashboard!</div>;
+  };
+
+  const buttons = [
+    { label: 'Display Borrowed Equipments', content: 'borrowed-items' },
+    { label: 'Display All Equipments', content: 'available-items' },
+    { label: 'Display Pending Equipments', content: 'pending-items' },
+    { label: 'Display Transaction History', content: 'completed-items' },
+  ];
+
   return (
-    <div className="dashboard-background">
-      <div className="container">
+    <div className="dashboard-container">
+      <div className="dashboard-content">
         <h1 className="display-4">Dashboard</h1>
         <p className="lead">Welcome to the dashboard!</p>
-        <div className="row">
-          <div className="col-md-3">
-            <Link to="/borrowed-items" className="btn btn-primary btn-block">
-              Display Borrowed Equipments
-            </Link>
-          </div>
-          <div className="col-md-3">
-            <Link to="/available-items" className="btn btn-primary btn-block">
-              Display Available Equipments
-            </Link>
-          </div>
-          <div className="col-md-3">
-            <Link to="/pending-items" className="btn btn-primary btn-block">
-              Display Pending Equipments
-            </Link>
-          </div>
-          <div className="col-md-3">
-            <Link to="/completed-items" className="btn btn-primary btn-block">
-              Display Transaction History
-            </Link>
-          </div>
+        <div className="buttons">
+          {buttons.map((button, index) => (
+            <button
+              key={index}
+              className="btn"
+              onClick={() => setSelectedContent(button.content)}
+            >
+              {button.label}
+            </button>
+          ))}
         </div>
+      </div>
+      <div className="content-container">
+        {renderContent()}
       </div>
     </div>
   );

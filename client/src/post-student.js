@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import './styles/post-students.css';
 
 function PostStudentData({ args_requested_item }) {
-  const [errorMessage, setErrorMessage] = useState(''); // Initialize the error message state
+  const [errorMessage, setErrorMessage] = useState('');
 
   const [formData, setFormData] = useState({
     args_student_number: '',
@@ -25,38 +26,58 @@ function PostStudentData({ args_requested_item }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (
+      !formData.args_student_number ||
+      !formData.args_student_firstname ||
+      !formData.args_student_surname ||
+      !formData.args_student_department ||
+      !formData.args_student_year ||
+      !formData.args_student_email_address ||
+      !formData.args_student_section
+    ) {
+      setErrorMessage('Please fill in all fields');
+      return;
+    }
+
+    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+    if (!emailRegex.test(formData.args_student_email_address)) {
+      setErrorMessage('Invalid email address format');
+      return;
+    }
+
     try {
       const mergedData = {
         ...formData,
         args_requested_item,
       };
 
-      const response = await axios.post('http://127.0.0.1:5000/user/student', mergedData, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-
-      console.log('Response:', response);
+      const response = await axios.post(
+        'http://127.0.0.1:5000/user/student',
+        mergedData,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
 
       if (response.status === 201) {
-        console.log('Student data saved successfully');
         navigate('/dashboard');
       } else {
-        setErrorMessage('Data could not be saved'); // Update the error message
+        setErrorMessage('Data could not be saved');
         console.error('Error saving student data:', response);
       }
     } catch (error) {
-      setErrorMessage('An error occurred while saving data(Check if Item is available)'); // Update the error message
+      setErrorMessage('An error occurred while saving data (Check if Item is available)');
       console.error('Error saving student data:', error);
     }
   };
 
   return (
-    <div>
+    <div className="post-student-data">
       <h2>Student Information</h2>
       <form onSubmit={handleSubmit}>
-        <div>
+        <div className="form-group">
           <label htmlFor="args_student_number">Student Number:</label>
           <input
             type="text"
@@ -66,17 +87,27 @@ function PostStudentData({ args_requested_item }) {
             onChange={handleChange}
           />
         </div>
-        <div>
-          <label htmlFor="args_student_section">Section:</label>
+        <div className="form-group">
+          <label htmlFor="args_student_firstname">First Name:</label>
           <input
             type="text"
-            id="args_student_section"
-            name="args_student_section"
-            value={formData.args_student_section}
+            id="args_student_firstname"
+            name="args_student_firstname"
+            value={formData.args_student_firstname}
             onChange={handleChange}
           />
         </div>
-        <div>
+        <div className="form-group">
+          <label htmlFor="args_student_surname">Last Name:</label>
+          <input
+            type="text"
+            id="args_student_surname"
+            name="args_student_surname"
+            value={formData.args_student_surname}
+            onChange={handleChange}
+          />
+        </div>
+        <div className="form-group">
           <label htmlFor="args_student_department">Department:</label>
           <input
             type="text"
@@ -86,7 +117,7 @@ function PostStudentData({ args_requested_item }) {
             onChange={handleChange}
           />
         </div>
-        <div>
+        <div className="form-group">
           <label htmlFor="args_student_year">Year:</label>
           <input
             type="text"
@@ -96,9 +127,8 @@ function PostStudentData({ args_requested_item }) {
             onChange={handleChange}
           />
         </div>
-        {/* Render these fields regardless of userEmail */}
-        <div>
-          <label htmlFor="args_student_email_address">Email:</label>
+        <div className="form-group">
+          <label htmlFor="args_student_email_address">Email Address:</label>
           <input
             type="text"
             id="args_student_email_address"
@@ -107,34 +137,26 @@ function PostStudentData({ args_requested_item }) {
             onChange={handleChange}
           />
         </div>
-        <div>
-          <label htmlFor="args_student_firstname">Firstname:</label>
+        <div className="form-group">
+          <label htmlFor="args_student_section">Section:</label>
           <input
             type="text"
-            id="args_student_firstname"
-            name="args_student_firstname"
-            value={formData.args_student_firstname}
+            id="args_student_section"
+            name="args_student_section"
+            value={formData.args_student_section}
             onChange={handleChange}
           />
         </div>
-        <div>
-          <label htmlFor="args_student_surname">Surname:</label>
-          <input
-            type="text"
-            id="args_student_surname"
-            name="args_student_surname"
-            value={formData.args_student_surname}
-            onChange={handleChange}
-          />
+        <div className="form-group">
+          <button type="submit">Submit</button>
         </div>
-        <button type="submit">Submit</button>
       </form>
 
       {errorMessage && (
         <div className="error-message">
           <b><i>{errorMessage}</i></b>
         </div>
-        )}
+      )}
     </div>
   );
 }

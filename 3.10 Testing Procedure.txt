@@ -1,0 +1,56 @@
+3.10 Testing Procedure
+
+The testing procedures for the Digital Appointment System of Identification Card at St. Vincent College of Cabuyao were conducted to ensure the system's performance and functionality. These tests included an Alpha Test, or initial testing, and a Beta Test, the final testing phase, to ensure that the system operates as intended.
+
+Alpha Test
+
+During the Alpha testing phase, the digital system was thoroughly examined for bugs and errors. The following key aspects were assessed:
+
+Error Handling: The system was tested to identify and rectify any bugs, ensuring that it responded appropriately to input errors and safely stored records.
+
+Functionality: The system underwent a comprehensive functionality test to confirm that all features and buttons operated correctly.
+
+Real-time Data: Proponents verified whether real-time data accurately reflected in the MySQL database, which serves as the system's data repository.
+
+Beta Test
+
+The Beta test represented the final phase of testing and involved actual simulations of student and ISO (administrator) accounts. The following testing procedures were carried out:
+
+Student Account: Students were invited to use the system by sending them a link within the domain. Proponents confirmed that students could create accounts, log in, schedule appointment dates, and verified the proper functionality of buttons. Additionally, data were checked for accurate storage in the MySQL database.
+
+ISO Account: Proponents personally visited the campus to allow the ISO (administrator) to test the system's functionality, ensuring that it met the intended requirements.
+
+3.10 Evaluation Procedure
+
+The evaluation procedures for the Digital Appointment System involved surveying college students at St. Vincent College of Cabuyao to determine and assess the system's software. The evaluation survey was structured based on ISO 25010 standards and encompassed the following components: functionality, usability, reliability, performance, security, compatibility, and supportability.
+
+Table 3.1 Likert Scale Measurement
+
+The Likert Scale measurement, as presented in Table 3.1, was utilized for respondents to express their opinions on the system's performance. The weighted mean formula was applied to calculate the average degree of respondents' opinions using the Likert Scale. The formula used is as follows:
+
+ 
+=
+∑
+(
+ 
+⋅
+ 
+)
+ 
+y= 
+N
+∑(x⋅f)
+​
+ 
+Where:
+
+ 
+y represents the Weighted Mean
+ 
+x represents the Weight (Likert Scale)
+ 
+f represents the Frequency
+ 
+N represents the Number of Respondents
+This formula allowed for the calculation of the average degree of opinion based on respondent feedback, aiding in the comprehensive evaluation of the system's effectiveness and usability.
+

@@ -1,5 +1,13 @@
 /* greetings.css */
 
+.dashboard-container {
+  
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
 .greetings-container {
   display: flex;
   flex-direction: column;
@@ -8,6 +16,11 @@
   height: 100vh;
   background-color: #f0f0f0;
   position: relative;
+  background-image: url('/src/img/background-image.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center top;
 }
 
 .greetings-header {
@@ -15,7 +28,11 @@
   width: 100%;
   margin-top: 20px;
   position: absolute;
-  top: 0;
+  top: 5%;
+  background-color: rgba(255, 255, 255, 0.5);
+  max-width: fit-content;
+  padding: 0.5%;
+  border-radius:2vmin;
 }
 
 .button-container {
@@ -28,6 +45,7 @@
   left: 0;
   right: 0;
   bottom: 0;
+  border-radius:2vmin;
 }
 
 .dashboard-button {
