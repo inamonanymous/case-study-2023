@@ -1,24 +1,77 @@
 {% extends "layout.html" %}
 {% block body %}
-<table>
-    <thead>
-        <th>
-            Borrow Id
-        </th>
-        <th>
-            Time Quota
-        </th>
-        <th>
-            Claim Status
-        </th>
-        <th>
-            Return Status
-        </th>
-        <th>
-            Pending Id
-        </th>
-    </thead>
 
+<style>
+    /* Style for the table */
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        max-width: 800px; /* Adjust the maximum width as needed */
+        margin: 0 auto;
+    }
+
+    th, td {
+        border: 1px solid #333; /* Border color */
+        padding: 8px;
+        text-align: center;
+    }
+
+    th {
+        background-color: #171a21; /* Header background color */
+        color: #fff; /* Header text color */
+    }
+
+    td {
+        background-color: #22252b; /* Cell background color */
+        color: #fff; /* Cell text color */
+    }
+
+    /* Style for buttons */
+    a button {
+        background-color: #171a21; /* Button background color */
+        color: #fff; /* Button text color */
+        border: none;
+        padding: 5px 10px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 14px;
+        margin: 5px;
+        cursor: pointer;
+    }
+
+    a button:hover {
+        background-color: #2d323b; /* Button background color on hover */
+    }
+
+    /* Style for the Back button */
+    .back-button {
+        display: block;
+        text-align: center;
+        margin: 20px;
+    }
+
+    .back-button a button {
+        background-color: #007bff; /* Back button background color */
+    }
+
+    .back-button a button:hover {
+        background-color: #0056b3; /* Back button background color on hover */
+    }
+</style>
+
+<table class="table table-striped table-dark">
+    <thead>
+        <tr>
+            <th>Borrow Id</th>
+            <th>Time Quota</th>
+            <th>Claim Status</th>
+            <th>Return Status</th>
+            <th>Pending Id</th>
+            <th>Claim</th>
+            <th>Return</th>
+        </tr>
+    </thead>
     <tbody>
         {% for index in range(borrowed['borrow_id']|length) %}
         <tr>
@@ -29,20 +82,21 @@
             <td>{{ borrowed['pending_id'][index] }}</td>
             <td>
                 <a href="{{ url_for('admin.claim_item', id=borrowed['pending_id'][index]) }}">
-                    <button>Claimed</button>
+                    <button class="btn btn-success">Claimed</button>
                 </a>
             </td>
             <td>
                 <a href="{{ url_for('admin.return_item', id=borrowed['pending_id'][index]) }}">
-                    <button>Returned</button>
+                    <button class="btn btn-danger">Returned</button>
                 </a>
             </td>
         </tr>
-    {% endfor %}
+        {% endfor %}
     </tbody>
-    
 </table>
-<a href="{{ url_for('admin.dashboard') }}">
-    <button>Back</button>
-</a>
+<div class="back-button">
+    <a href="{{ url_for('admin.dashboard') }}">
+        <button class="btn btn-primary">Back</button>
+    </a>
+</div>
 {% endblock %}

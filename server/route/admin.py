@@ -8,6 +8,29 @@ admin_bp = Blueprint('admin', __name__)
 
 advance_datetime = datetime.datetime.now() + datetime.timedelta(hours=5)
 
+@admin_bp.route('/option/<option>')
+def load_option(option):
+    if 'admin_login' in session:
+        
+    
+        b_items = BorrowedItems()
+        p_items = PendingItems()
+        c_items = CompletedItems()
+        
+        pending = p_items.get()
+        borrowed = b_items.get()
+        completed = c_items.get()
+
+
+
+        content = render_template(f'{option}.html',
+                                   
+                                   borrowed=borrowed, 
+                                   pending=pending, 
+                                   completed=completed)
+        return content
+    return redirect('index')
+
 @admin_bp.route('/completed-items', methods=['GET'])
 def completed_items():
     if 'admin_login' in session:
@@ -84,7 +107,7 @@ def verify_item(unique):
             )
             db.session.add(borrowed_obj)
             db.session.commit()
-            return redirect(url_for('admin.pending_items'))
+            return redirect(request.url)
         
         return f"Student already Verified"
     return redirect(url_for('index'))
@@ -103,7 +126,8 @@ def pending_items():
 def dashboard():
     if 'admin_login' in session:
         unverified = Pending.query.filter_by(is_verified=False).count()
-        return render_template('dashboard.html', unverified=unverified)
+        current_user = Admin.query.filter_by(admin_username=session.get('admin_login', "")).first()
+        return render_template('dashboard.html', unverified=unverified, current_user=current_user)
     return redirect(url_for('index'))
 
 #check if log in is true

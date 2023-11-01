@@ -1,27 +1,60 @@
 {% extends "layout.html" %}
-{% block body %}
-<table>
-    <thead>
-        <th>
-            Completed Id
-        </th>
-        <th>
-            Student Number
-        </th>
-        <th>
-            Student Department
-        </th>
-        <th>
-            Student Name
-        </th>
-        <th>
-            Equipment Type
-        </th>
-        <th>
-            Equipment Unique Key
-        </th>
-    </thead>
+{% block head %}
+    
+    <style>
+        /* Style for the table */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            max-width: 800px; /* Adjust the maximum width as needed */
+            margin: 0 auto;
+        }
 
+        th, td {
+            border: 1px solid #333; /* Border color */
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #171a21; /* Header background color */
+            color: #fff; /* Header text color */
+        }
+
+        td {
+            background-color: #22252b; /* Cell background color */
+            color: #fff; /* Cell text color */
+        }
+
+        /* Style for the Back button */
+        .back-button {
+            display: block;
+            text-align: center;
+            margin: 20px;
+        }
+
+        .back-button a button {
+            background-color: #007bff; /* Back button background color */
+        }
+
+        .back-button a button:hover {
+            background-color: #0056b3; /* Back button background color on hover */
+        }
+    </style>
+</head>
+{% endblock %}
+{% block body %}
+<table class="table table-striped table-dark">
+    <thead>
+        <tr>
+            <th>Completed Id</th>
+            <th>Student Number</th>
+            <th>Student Department</th>
+            <th>Student Name</th>
+            <th>Equipment Type</th>
+            <th>Equipment Unique Key</th>
+        </tr>
+    </thead>
     <tbody>
         {% for index in range(completed['completed_id']|length) %}
         <tr>
@@ -32,11 +65,12 @@
             <td>{{ completed['equip_type'][index] }}</td>
             <td>{{ completed['equip_unique_key'][index] }}</td>
         </tr>
-    {% endfor %}
+        {% endfor %}
     </tbody>
-    
 </table>
-<a href="{{ url_for('admin.dashboard') }}">
-    <button>Back</button>
-</a>
+<div class="back-button">
+    <a href="{{ url_for('admin.dashboard') }}">
+        <button class="btn btn-primary">Back</button>
+    </a>
+</div>
 {% endblock %}

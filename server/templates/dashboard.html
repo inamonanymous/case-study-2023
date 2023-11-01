@@ -1,21 +1,53 @@
 {% extends "layout.html" %}
+{% block head %}
+    <style>
+        /* Add a style for the active tab */
+        .nav-item.active a {
+            background-color: #007bff;
+            color: #fff;
+        }
+    </style>
+</head>
+{% endblock %}
 {% block body %}
+    <div class="left-panel">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link" href="javascript:void(0);" onclick="loadOption('borrowed-items', this)">Borrowed Items</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="javascript:void(0);" onclick="loadOption('completed-items', this)">Completed Items</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="javascript:void(0);" onclick="loadOption('pending-items', this)">Pending Items</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-bg-danger" href="javascript:void(0);" onclick="loadOption('logout', this)">Log out</a>
+            </li>
+        </ul>
+    </div>
+    <div class="content">
+        <div id="dynamic-content">
+            Welcome Admin "{{ current_user.admin_firstname }}, {{ current_user.admin_surname }}"
+        </div>
+    </div>
+    <script>
+        function loadOption(option, clickedElement) {
+            // Remove the 'active' class from all tabs
+            const tabs = document.querySelectorAll('.nav-item');
+            tabs.forEach(tab => tab.classList.remove('active'));
 
-<a href="{{ url_for('admin.pending_items') }}">
-    <button>Pending Items {{ unverified }}</button>
-</a>
+            // Add the 'active' class to the clicked tab
+            clickedElement.parentNode.classList.add('active');
 
-<a href="{{ url_for('admin.borrowed_items') }}">
-    <button>Borrowed Items</button>
-</a>
-
-<a href="{{ url_for('admin.completed_items') }}">
-    <button>Borrow History</button>
-</a>
-
-<a href="{{ url_for('index') }}">
-    <button>Logout</button>
-</a>
-
-
+            fetch(`/option/${option}`)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("dynamic-content").innerHTML = data;
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        }
+    </script>
 {% endblock %}
