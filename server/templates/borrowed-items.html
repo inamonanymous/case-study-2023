@@ -2,8 +2,8 @@
 {% block body %}
 
 <style>
-    /* Style for the table */
-    table {
+      /* Style for the table */
+      table {
         border-collapse: collapse;
         width: 100%;
         max-width: 800px; /* Adjust the maximum width as needed */
@@ -26,22 +26,18 @@
         color: #fff; /* Cell text color */
     }
 
-    /* Style for buttons */
-    a button {
-        background-color: #171a21; /* Button background color */
-        color: #fff; /* Button text color */
-        border: none;
-        padding: 5px 10px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 14px;
-        margin: 5px;
-        cursor: pointer;
-    }
+    /* Style for link-like buttons */
+    .action-btn {
+    padding: 12px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: bold;
+}
 
-    a button:hover {
-        background-color: #2d323b; /* Button background color on hover */
+    .action-btn:hover {
+        background-color: #0088cc;
     }
 
     /* Style for the Back button */
@@ -53,11 +49,38 @@
 
     .back-button a button {
         background-color: #007bff; /* Back button background color */
+        color: #fff; /* Back button text color */
+        border: none;
+        padding: 5px 10px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 14px;
+        margin: 5px;
+        cursor: pointer;
     }
 
     .back-button a button:hover {
         background-color: #0056b3; /* Back button background color on hover */
     }
+
+    .gradient-claim-btn {
+    background: linear-gradient(to right, #a8e063, #56ab2f);
+    border: none;
+    color: white;
+    }
+
+    .gradient-claim-btn:hover {
+    background: linear-gradient(to right, #7bcd4f, #449d23); /* Darkened gradient */
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.2); /* Optional: Adds a soft shadow */
+    transform: scale(1.02); /* Optional: Slightly scales the button up */
+    }
+
+    .flat-return-btn {
+    background-color: #ff758c;
+    border: none;
+    color: white;
+}
 </style>
 
 <table class="table table-striped table-dark">
@@ -68,8 +91,7 @@
             <th>Claim Status</th>
             <th>Return Status</th>
             <th>Pending Id</th>
-            <th>Claim</th>
-            <th>Return</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -77,26 +99,29 @@
         <tr>
             <td>{{ borrowed['pending_id'][index] }}</td>
             <td>{{ borrowed['time_quota'][index] }}</td>
-            <td>{{ borrowed['is_claimed'][index] }}</td>
-            <td>{{ borrowed['is_returned'][index] }}</td>
+            <td>{{ 'Yes' if borrowed['is_claimed'][index] else 'No' }}</td>
+            <td>{{ 'Yes' if borrowed['is_returned'][index] else 'No' }}</td>
             <td>{{ borrowed['pending_id'][index] }}</td>
             <td>
-                <a href="{{ url_for('admin.claim_item', id=borrowed['pending_id'][index]) }}">
-                    <button class="btn btn-success">Claimed</button>
-                </a>
-            </td>
-            <td>
-                <a href="{{ url_for('admin.return_item', id=borrowed['pending_id'][index]) }}">
-                    <button class="btn btn-danger">Returned</button>
-                </a>
+                {% if not borrowed['is_claimed'][index] %}
+                <button onclick="location.href='{{ url_for('admin.claim_item', id=borrowed['pending_id'][index]) }}';" class="action-btn gradient-claim-btn">
+                    Claim
+                </button>
+                {% else %}
+                <button onclick="location.href='{{ url_for('admin.return_item', id=borrowed['pending_id'][index]) }}';" class="action-btn flat-return-btn">
+                    Return
+                </button>
+                {% endif %}
             </td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
+
 <div class="back-button">
     <a href="{{ url_for('admin.dashboard') }}">
         <button class="btn btn-primary">Back</button>
     </a>
 </div>
+
 {% endblock %}

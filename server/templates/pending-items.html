@@ -86,7 +86,10 @@
             <td>{{ pending['is_verified'][index] }}</td>
             <td>
                 <a href="{{ url_for('admin.verify_item', unique=pending['equip_unique_key'][index]) }}">
-                    <button class="btn btn-success">Verify</button>
+                    <button class="btn btn-outline-success">Verify</button>
+                </a>
+                <a href="{{ url_for('admin.disproof_item', unique=pending['equip_unique_key'][index]) }}">
+                    <button class="btn btn-outline-danger">Disproof</button>
                 </a>
             </td>
         </tr>

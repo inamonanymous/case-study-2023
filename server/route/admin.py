@@ -11,8 +11,6 @@ advance_datetime = datetime.datetime.now() + datetime.timedelta(hours=5)
 @admin_bp.route('/option/<option>')
 def load_option(option):
     if 'admin_login' in session:
-        
-    
         b_items = BorrowedItems()
         p_items = PendingItems()
         c_items = CompletedItems()
@@ -20,8 +18,6 @@ def load_option(option):
         pending = p_items.get()
         borrowed = b_items.get()
         completed = c_items.get()
-
-
 
         content = render_template(f'{option}.html',
                                    
@@ -91,7 +87,22 @@ def borrowed_items():
         return render_template('borrowed-items.html', borrowed=borrowed)
     return redirect(url_for('index'))
 
-#verify requested item and pass it to borrowed items
+@admin_bp.route('/disproof/<string:unique>')
+def disproof_item(unique):
+    if 'admin_login' in session:
+        pending_obj = Pending.query.filter_by(equip_unique_key=unique).first()
+        equipment_obj = Equipment.query.filter_by(equip_unique_key=unique).first()
+        student_obj = Student.query.filter_by(requested_item=unique).first()
+        if not pending_obj.is_verified:
+            db.session.delete(pending_obj)
+            db.session.delete(student_obj)
+            equipment_obj.is_available=1
+            equipment_obj.is_pending=0
+            db.session.commit()       
+            return redirect(url_for('admin.load_option', option='pending-items'))
+        return redirect(url_for('admin.load_option', option='pending-items'))
+    return redirect(url_for('index'))
+
 @admin_bp.route('/verify/<string:unique>')
 def verify_item(unique):
     if 'admin_login' in session:
@@ -107,8 +118,7 @@ def verify_item(unique):
             )
             db.session.add(borrowed_obj)
             db.session.commit()
-            return redirect(request.url)
-        
+            return redirect(url_for('admin.load_option', option='pending-items'))
         return f"Student already Verified"
     return redirect(url_for('index'))
 

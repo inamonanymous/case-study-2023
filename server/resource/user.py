@@ -41,21 +41,20 @@ equipment_resource_fields = {
 class Equipments(Resource):
     @marshal_with(equipment_resource_fields)
     def get(self, unique_key):
-        
         equipment = Equipment.query.filter_by(equip_unique_key=unique_key).first()
         if not equipment:
             abort(409, message="Not Found")
         
         return equipment
     
-    @marshal_with(equipment_resource_fields)
-    def post(self, unique):
+"""    @marshal_with(equipment_resource_fields)
+    def post(self):
         args = post_args_equip.parse_args()
-        equipment = Equipment.query.filter_by(equip_unique_key=unique).first()
+        equipment = Equipment.query.filter_by(equip_unique_key=args['args_unique_key']).first()
         if equipment:
             abort(409, message="Equipment Exists")
         equip_obj = Equipment(equip_type=args['args_equip_type'],
-                              equip_unique_key=unique,
+                              equip_unique_key=args['args_unique_key'],
                               is_available=args['args_is_available'],
                               is_pending=args['args_is_pending']
                               )
@@ -67,7 +66,7 @@ class Equipments(Resource):
         # Commit the changes to the database
         db.session.commit()
         
-        return equip_obj, 201
+        return equip_obj, 201"""
     
 
 
