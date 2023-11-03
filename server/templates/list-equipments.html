@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<div>
+    <button id="addItemButton" onclick="attachButtonListener()">
+        Add new item
+    </button>
+</div>
+
+<div id="itemForm" style="display:none;">
+    <form id="equipmentForm" method="post" action="/save-equipment">
+        <label for="args_equip_type">Equipment Type</label>
+        <input type="text" id="args_equip_type" name="args_equip_type" placeholder="Basketball, Volleyball, etc..">
+        <button type="submit">Submit</button>
+    </form>
+</div>
+<div>
+    <table>
+        <thead>
+            <th>Equipment ID</th>
+            <th>Type</th>
+            <th>Unique Key</th>
+            <th>Availability</th>
+            <th>Status</th>
+        </thead>
+        <tbody>
+            {% for i in range(equipments['equip_id']|length) %}
+            <tr>
+                <td>
+                    {{ equipments['equip_id'][i] }}
+                </td>
+                <td>
+                    {{ equipments['equip_type'][i] }}
+                </td>
+                <td>
+                    {{ equipments['equip_unique_key'][i] }}
+                </td>
+                <td>
+                    {{ equipments['is_available'][i] }}
+                </td>
+                <td>
+                    {{ equipments['is_pending'][i] }}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+{% endblock %}

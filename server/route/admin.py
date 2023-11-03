@@ -1,12 +1,27 @@
 from flask import Blueprint, render_template, request, url_for, session, flash, redirect
 from models.database import Admin, Pending, Student, Borrowed, Equipment, db , Completed
 from werkzeug.security import check_password_hash, generate_password_hash
-from resource.user import PendingItems, BorrowedItems, CompletedItems
+from resource.user import PendingItems, BorrowedItems, CompletedItems, ShowEquipments
 import datetime
 
 admin_bp = Blueprint('admin', __name__)
 
 advance_datetime = datetime.datetime.now() + datetime.timedelta(hours=5)
+
+@admin_bp.route('/save-equipment', methods=['POST'])
+def save_equipment():
+    if 'admin_login' in session:
+        equipment_type = request.form['args_equip_type']
+        equipment_obj = Equipment(
+            equip_type=equipment_type,
+            equip_unique_key=ShowEquipments.generate_unique_id(13),
+            is_available=1,
+            is_pending=0
+        )
+        db.session.add(equipment_obj)
+        db.session.commit()
+        return redirect(url_for('admin.load_option', option='list-equipments'))
+    return redirect(url_for('index'))
 
 @admin_bp.route('/option/<option>')
 def load_option(option):
@@ -14,16 +29,18 @@ def load_option(option):
         b_items = BorrowedItems()
         p_items = PendingItems()
         c_items = CompletedItems()
+        list_equipments = ShowEquipments()
         
         pending = p_items.get()
         borrowed = b_items.get()
         completed = c_items.get()
-
+        equipments = list_equipments.get()
+        
         content = render_template(f'{option}.html',
-                                   
                                    borrowed=borrowed, 
                                    pending=pending, 
-                                   completed=completed)
+                                   completed=completed,
+                                   equipments=equipments)
         return content
     return redirect('index')
 

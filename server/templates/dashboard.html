@@ -22,6 +22,9 @@
                 <a class="nav-link" href="javascript:void(0);" onclick="loadOption('pending-items', this)">Pending Items <span class="text-warning">{{ unverified }}</span> </a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" href="javascript:void(0);" onclick="loadOption('list-equipments', this)">List of Equipments  </a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link text-bg-danger" href="javascript:void(0);" onclick="loadOption('logout', this)">Log out</a>
             </li>
         </ul>
@@ -33,21 +36,38 @@
     </div>
     <script>
         function loadOption(option, clickedElement) {
-            // Remove the 'active' class from all tabs
-            const tabs = document.querySelectorAll('.nav-item');
-            tabs.forEach(tab => tab.classList.remove('active'));
+        // Remove the 'active' class from all tabs
+        const tabs = document.querySelectorAll('.nav-item');
+        tabs.forEach(tab => tab.classList.remove('active'));
 
-            // Add the 'active' class to the clicked tab
-            clickedElement.parentNode.classList.add('active');
+        // Add the 'active' class to the clicked tab
+        clickedElement.parentNode.classList.add('active');
 
-            fetch(`/option/${option}`)
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById("dynamic-content").innerHTML = data;
-                })
-                .catch(error => {
-                    console.error(error);
-                });
+        fetch(`/option/${option}`)
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("dynamic-content").innerHTML = data;
+            })
+            .catch(error => {
+                console.error(error);
+            });
         }
+        
+        function attachButtonListener() {
+        var button = document.getElementById('addItemButton');
+        var form = document.getElementById('itemForm');
+        if (button && form) {
+            button.addEventListener('click', function() {
+                if (form.style.display === "none") {
+                    form.style.display = "block";
+                } else {
+                    form.style.display = "none";
+                }
+            });
+        } else {
+            console.error('Button or form not found!');
+        }
+        }
+
     </script>
 {% endblock %}
