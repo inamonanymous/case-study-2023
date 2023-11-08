@@ -10,7 +10,7 @@ advance_datetime = datetime.datetime.now() + datetime.timedelta(hours=5)
 
 @admin_bp.route('/save-equipment', methods=['POST'])
 def save_equipment():
-    if 'admin_login' in session:
+    if 'admin_login' in session and request.method == "POST":
         equipment_type = request.form['args_equip_type']
         equipment_obj = Equipment(
             equip_type=equipment_type,

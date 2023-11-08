@@ -57,13 +57,13 @@
         var button = document.getElementById('addItemButton');
         var form = document.getElementById('itemForm');
         if (button && form) {
-            button.addEventListener('click', function() {
+            
                 if (form.style.display === "none") {
                     form.style.display = "block";
                 } else {
                     form.style.display = "none";
                 }
-            });
+            
         } else {
             console.error('Button or form not found!');
         }

@@ -26,7 +26,7 @@ class ShowEquipments(Resource):
     
     @staticmethod
     def generate_unique_id(length):
-        characters = string.ascii_letters + string.digits + string.punctuation
+        characters = string.ascii_letters + string.digits
         return ''.join(random.choices(characters, k=length))
 
 

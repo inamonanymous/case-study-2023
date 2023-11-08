@@ -13,6 +13,8 @@
   text-align: center;
   max-width: fit-content;
   margin: 0 auto; /* Center the content horizontally */
+  overflow-y: auto; /* Enable vertical scrolling */
+  max-height: 80vh; /* Set a max height */
 }
 
 .available-items-title {
