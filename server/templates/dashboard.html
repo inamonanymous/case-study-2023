@@ -6,6 +6,7 @@
             background-color: #007bff;
             color: #fff;
         }
+        
     </style>
 </head>
 {% endblock %}
@@ -37,36 +38,28 @@
     <script>
         function loadOption(option, clickedElement) {
         // Remove the 'active' class from all tabs
-        const tabs = document.querySelectorAll('.nav-item');
-        tabs.forEach(tab => tab.classList.remove('active'));
+            const tabs = document.querySelectorAll('.nav-item');
+            tabs.forEach(tab => tab.classList.remove('active'));
 
-        // Add the 'active' class to the clicked tab
-        clickedElement.parentNode.classList.add('active');
+            // Add the 'active' class to the clicked tab
+            clickedElement.parentNode.classList.add('active');
 
-        fetch(`/option/${option}`)
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById("dynamic-content").innerHTML = data;
-            })
-            .catch(error => {
-                console.error(error);
-            });
+            fetch(`/option/${option}`)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById("dynamic-content").innerHTML = data;
+                })
+                .catch(error => {
+                    console.error(error);
+                });
         }
         
-        function attachButtonListener() {
-        var button = document.getElementById('addItemButton');
-        var form = document.getElementById('itemForm');
-        if (button && form) {
-            
-                if (form.style.display === "none") {
-                    form.style.display = "block";
-                } else {
-                    form.style.display = "none";
-                }
-            
-        } else {
-            console.error('Button or form not found!');
+        function openModal() {
+            document.getElementById('modalBackground').style.display = 'flex';
         }
+
+        function closeModal() {
+            document.getElementById('modalBackground').style.display = 'none';
         }
 
     </script>

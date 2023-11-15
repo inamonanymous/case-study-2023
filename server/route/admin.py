@@ -44,13 +44,6 @@ def load_option(option):
         return content
     return redirect('index')
 
-@admin_bp.route('/completed-items', methods=['GET'])
-def completed_items():
-    if 'admin_login' in session:
-        c_items = CompletedItems()
-        completed_items = c_items.get()
-        return render_template('completed-items.html', completed=completed_items)
-    return redirect(url_for('index'))
 
 @admin_bp.route('/return/<int:id>')
 def return_item(id):
@@ -96,13 +89,7 @@ def claim_item(id):
         return f"It is either the Item isn't Claimed or Returned"
     return redirect(url_for('index'))
 
-@admin_bp.route('/borrowed-items', methods=['POST', 'GET'])
-def borrowed_items():
-    if 'admin_login' in session:
-        b_items = BorrowedItems()
-        borrowed = b_items.get()
-        return render_template('borrowed-items.html', borrowed=borrowed)
-    return redirect(url_for('index'))
+
 
 @admin_bp.route('/disproof/<string:unique>')
 def disproof_item(unique):
@@ -140,14 +127,6 @@ def verify_item(unique):
     return redirect(url_for('index'))
 
 #render the pending items student requested
-@admin_bp.route('/pending-items', methods=['POST', 'GET'])
-def pending_items():
-    if 'admin_login' in session:
-        p_items = PendingItems()
-        pending = p_items.get()
-        return render_template('pending-items.html', pending=pending)
-    return redirect(url_for('index'))
-
 #dashboard route
 @admin_bp.route('/dashboard', methods=['POST', 'GET'])
 def dashboard():

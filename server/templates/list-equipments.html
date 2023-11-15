@@ -1,18 +1,42 @@
-{% extends "layout.html" %}
+{% extends "tables.html" %}
 {% block body %}
+<style>
+    #modalBackground {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensure it's on top of other elements */
+}
 
+/* Modal Content */
+#itemForm {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+</style>
 <div>
-    <button id="addItemButton" onclick="attachButtonListener()">
+    <button class="btn btn-outline-success" id="addItemButton" onclick="openModal()">
         Add new item
     </button>
 </div>
-
-<div id="itemForm" style="display:none;">
-    <form id="equipmentForm" method="post" action="/save-equipment">
-        <label for="args_equip_type">Equipment Type</label>
-        <input type="text" id="args_equip_type" name="args_equip_type" placeholder="Basketball, Volleyball, etc..">
-        <button type="submit">Submit</button>
-    </form>
+<div id="modalBackground" style="display: none;">
+    <div id="itemForm">
+        <form id="equipmentForm" method="post" action="/save-equipment">
+            <p class="text-dark font-italic">Equipment Type</p>
+            <input type="text" id="args_equip_type" name="args_equip_type" placeholder="Basketball, Volleyball, etc..">
+            <button type="submit" class="btn btn-outline-dark">Submit</button>
+            <a href="#" onclick="closeModal()">Exit</a>
+        </form>
+    </div>
 </div>
 <div>
     <table>

@@ -8,7 +8,182 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>Admin</title>
 </head>
+<style>
+    /* ... your existing styles ... */
+
+/* Initial state of the footer - assuming you want it visible at first */
+    #footer {
+        transition: transform 0.5s ease-in-out;
+        transform: translateY(100%); /* Start in non-visible state */
+    }
+
+    /* Style for the toggle button */
+    #footerToggle {
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        z-index: 101; /* Ensure it's above the footer */
+    }
+
+
+    .footer {
+        text-align: center;
+        padding: 5px; /* Less padding to reduce height */
+        background-color: #413434;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        font-size: 0.80em; /* Smaller font size to reduce space */
+        color: aquamarine;
+}
+
+.footer-content {
+    display: flex; /* Flex layout for responsiveness */
+    flex-direction: column; /* Stack sections vertically */
+    align-items: center; /* Align items in the center */
+    justify-content: center; /* Center content vertically */
+    gap: 5px; /* Less gap between sections */
+}
+
+.footer-section {
+    margin: 5px 0; /* Reduced vertical margin */
+    text-align: center; /* Center text within each section */
+}
+
+.footer-section h3 {
+    font-size: 1em; /* Slightly larger font size for headers */
+}
+
+/* Adjustments for mobile screens */
+@media (max-width: 768px) {
+    .footer-content {
+        flex-direction: row; /* Change to row layout for smaller screens */
+        flex-wrap: wrap; /* Allow wrapping if needed */
+        justify-content: space-around; /* Space out sections on small screens */
+    }
+
+    .footer-section {
+        max-width: 200px; /* Limit width to prevent overflow */
+    }
+}
+
+/* Reduced copyright text */
+p.copywrite {
+    font-size: 0.7em; /* Even smaller font for copyright text */
+    margin-top: 10px; /* Added margin above copyright */
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #333;
+    color: white;
+}
+
+.header .logo {
+    width: 50px; /* Adjust as per your logo size */
+}
+
+img {
+    max-width: 100%; /* Maximum width */
+    max-height: 50%; /* Maximum height */
+    
+}
+
+.header .navbar a {
+    color: white;
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+/* Responsive navbar */
+@media (max-width: 768px) {
+    .header .navbar {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .header .navbar a {
+        margin: 5px 0;
+    }
+}
+</style>
 <body>
+    <header class="header">
+        <div class="logo">
+            <img class="img" src="{{ url_for('static', filename='img/logo.png') }}" alt="Your Logo">
+        </div>
+        <nav class="navbar">
+            <a href="/dashboard">Home</a>
+            <a href="">Services</a>
+            <a href="#" onclick="toggleFooter()">Contact</a>
+            <!-- Add other navigation links as needed -->
+        </nav>
+    </header>
+
     {% block body %}{% endblock %}
+    
+    <button class="btn btn-outline-info" id="footerToggle" onclick="toggleFooter()">About Us!</button>
+    <div class="footer" id="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Connect with Us:</h3>
+                <p>Email: <a href="mailto:YourEmail@example.com">schoopdogg@edu.com</a></p>
+                <p>Phone: +63 956-604-6623 </p>
+            </div>
+
+            <div class="footer-section">
+                <h3>Meet the Team:</h3>
+                <p>Hannah Grampa: Project Manager</p>
+                <p>Stephen Aguilar: Software Engineer</p>
+                <p>Kervie Perquesa: Manuscript Editor</p>
+            </div>
+
+            <div class="footer-section">
+                <h3>Stay Connected:</h3>
+                <p>Follow us on <a target="_blank" href="https://www.linkedin.com/in/aguilar-stephen-joaquin-g-347737276/">LinkedIn</a> | <a target="_blank" href="https://twitter.com/stphnjqn19">Twitter</a> | <a target="_blank" href="https://instagram.com/stephen_420__">Instagram</a></p>
+            </div>
+
+            <div class="footer-section">
+                <h3>Address:</h3>
+                <p>Mamatid, Cabuyao, Laguna</p>
+            </div>
+
+            <div class="footer-section">
+                <h3>About Our System:</h3>
+                <p>Our system is dedicated to monitoring and optimizing school gym needs, ensuring a seamless and efficient experience for students and staff. We strive to enhance the educational environment by providing top-notch solutions for managing and maintaining school fitness facilities.</p>
+            </div>
+        </div>
+
+        <!-- Copyright Section -->
+        <div>
+            <p style="font-size: 0.8em;">&copy; 2023 Case Study Analysis. All rights reserved.</p>
+        </div>
+    </div>
+
+<script>
+    // Initial state
+    function toggleFooter() {
+    const footer = document.getElementById('footer');
+    
+    // Check the current state of the footer and toggle it
+    if (footer.style.transform === 'translateY(100%)') {
+        footer.style.transform = 'translateY(0)'; // Slide in to become visible
+    } else {
+        footer.style.transform = 'translateY(100%)'; // Slide out to become non-visible
+    }
+}
+
+// Set the footer to non-visible state immediately on page load
+    window.onload = function() {
+        const footer = document.getElementById('footer');
+        footer.style.transform = 'translateY(100%)'; // Ensure it starts out of view
+    };
+    </script>
 </body>
+
+    
+
 </html>
