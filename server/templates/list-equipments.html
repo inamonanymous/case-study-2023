@@ -1,7 +1,28 @@
 {% extends "tables.html" %}
 {% block body %}
 <style>
-    #modalBackground {
+#modalBackgroundEdit {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensure it's on top of other elements */
+}
+
+/* Modal Content */
+#itemFormEdit {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+#modalBackground {
     position: fixed;
     top: 0;
     left: 0;
@@ -28,6 +49,17 @@
         Add new item
     </button>
 </div>
+<div id="modalBackgroundEdit" style="display: none;">
+    <div id="itemFormEdit">
+        <form id="equipmentFormEdit" method="put" action="/edit-equipment/">
+            <p class="text-dark font-italic" id="equip_type_view">Equipment Type: </p>
+            <input type="text" id="args_equip_id_edit" name="args_equip_id_edit" hidden>
+            <input type="text" id="args_equip_type_edit" name="args_equip_type_edit" placeholder="Basketball, Volleyball, etc..">
+            <button type="submit" class="btn btn-outline-dark">Submit</button>
+            <a href="#" onclick="closeModalEdit()">Exit</a>
+        </form>
+    </div>
+</div>
 <div id="modalBackground" style="display: none;">
     <div id="itemForm">
         <form id="equipmentForm" method="post" action="/save-equipment">
@@ -46,6 +78,7 @@
             <th>Unique Key</th>
             <th>Availability</th>
             <th>Status</th>
+            <th>Manage</th>
         </thead>
         <tbody>
             {% for i in range(equipments['equip_id']|length) %}
@@ -65,11 +98,20 @@
                 <td>
                     {{ equipments['is_pending'][i] }}
                 </td>
+                <td>
+                    <select name="manage-item" id="manage-item" onchange="manageItem(this.value, {{ equipments['equip_id'][i] }})">
+                        <option disabled selected>Select Action</option>
+                        <option value="0">Edit</option>
+                        <option value="1">Delete</option>
+                    </select>
+                </td>
             </tr>
             {% endfor %}
         </tbody>
     </table>
 </div>
-
+<script>
+    
+</script>
 
 {% endblock %}

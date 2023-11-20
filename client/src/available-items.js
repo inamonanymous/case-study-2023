@@ -1,4 +1,3 @@
-// src/AvailableItems.js
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './styles/available-items.css';
@@ -6,25 +5,44 @@ import './styles/available-items.css';
 function booleanToYesNo(value) {
   return value ? 'Yes' : 'No';
 }
+function capitalize(str){
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
 
 function AvailableItems() {
   const [items, setItems] = useState({ equip_id: [], equip_type: [], equip_unique_key: [], is_available: [], is_pending: [] });
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    fetch('/user/equipments/all')
-      .then((response) => response.json())
-      .then((data) => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`/user/equipments/all?search=${searchQuery}`);
+        const data = await response.json();
         setItems(data);
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error('Error fetching data:', error);
-      });
-  }, []);
+      }
+    };
+
+    fetchData();
+  }, [searchQuery]);
+
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+    console.log("Search Query:", event.target.value);
+  };
 
   return (
     <div className="available-items-container">
       <div className="available-items-content">
         <h2 className="available-items-title">Equipments</h2>
+        <input 
+          type="text"
+          placeholder="Search Equipments"
+          value={searchQuery}
+          onChange={handleSearchChange}
+          className="search-input"
+        />
         <table className="available-items-table">
           <thead>
             <tr>
@@ -37,17 +55,13 @@ function AvailableItems() {
           <tbody>
             {items.equip_unique_key.map((unique_key, index) => (
               <tr key={index}>
-                <td>{items.equip_type[index]}</td>
-                <td>{unique_key}</td>
+                <td>{capitalize(items.equip_type[index])}</td>
+                <td>{capitalize(unique_key)}</td>
                 <td>{booleanToYesNo(items.is_pending[index])}</td>
                 <td>
-                  {items.is_available[index] ? (
-                    <Link to={`/request-equipment/${items.equip_unique_key[index]}`}>
+                  <Link to={`/request-equipment/${items.equip_unique_key[index]}`}>
                       <button className="btn btn-primary">Borrow</button>
-                    </Link>
-                  ) : (
-                    <p>Not Available</p>
-                  )}
+                  </Link>
                 </td>
               </tr>
             ))}

@@ -31,7 +31,7 @@ function Dashboard() {
     <div className="dashboard-container">
       <div className="dashboard-content">
         <h1 className="display-4">Dashboard</h1>
-        <p className="lead">Welcome to the dashboard!</p>
+        <p className="lead">Digital Sports Equipment Monitoring</p>
         <div className="buttons">
           {buttons.map((button, index) => (
             <button

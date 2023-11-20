@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, url_for, session, flash, redirect
+from flask import Blueprint, render_template, request, url_for, session, flash, redirect, jsonify
 from models.database import Admin, Pending, Student, Borrowed, Equipment, db , Completed
 from werkzeug.security import check_password_hash, generate_password_hash
 from resource.user import PendingItems, BorrowedItems, CompletedItems, ShowEquipments
@@ -7,6 +7,29 @@ import datetime
 admin_bp = Blueprint('admin', __name__)
 
 advance_datetime = datetime.datetime.now() + datetime.timedelta(hours=5)
+
+@admin_bp.route('/delete-equipment/<int:id>', methods=['DELETE'])
+def delete_equipment(id):
+    if 'admin_login' in session and request.method=="DELETE":
+        target_equipment = Equipment.query.filter_by(equip_id=id).first()
+        if not target_equipment:
+            return jsonify({"message": "Item not found"}), 494
+        db.session.delete(target_equipment)
+        db.session.commit()
+        return jsonify({"message": "Equipment deleted"}), 299
+    return redirect(url_for('index'))
+
+@admin_bp.route('/edit-equipment/<int:id>', methods=['PUT'])
+def edit_equipment(id):
+    if 'admin_login' in session and request.method=="PUT":
+        target_equipment = Equipment.query.filter_by(equip_id=id).first()
+        if not target_equipment:
+            return jsonify({"message": "Item not found"}), 494
+        data = request.get_json()
+        target_equipment.equip_type = data['args_equip_name']
+        db.session.commit()
+        return jsonify({"message": "Equipment updated"}), 299
+    return redirect(url_for('index'))
 
 @admin_bp.route('/save-equipment', methods=['POST'])
 def save_equipment():
@@ -20,7 +43,7 @@ def save_equipment():
         )
         db.session.add(equipment_obj)
         db.session.commit()
-        return redirect(url_for('admin.load_option', option='list-equipments'))
+        return redirect(url_for('admin.dashboard'))
     return redirect(url_for('index'))
 
 @admin_bp.route('/option/<option>')
@@ -70,7 +93,7 @@ def return_item(id):
             db.session.delete(pending_obj)
             db.session.delete(borrowed_obj)
             db.session.commit()
-            return redirect(url_for('admin.borrowed_items'))
+            return redirect(url_for('admin.dashboard'))
         return f"It is either the Item isn't Claimed or Returned"
     return redirect(url_for('index'))
 
@@ -85,26 +108,32 @@ def claim_item(id):
             borrowed_obj.time_quota = advance_datetime
             student_obj.status = 'claimed'
             db.session.commit()
-            return redirect(url_for('admin.borrowed_items'))
+            return redirect(url_for('admin.dashboard'))
         return f"It is either the Item isn't Claimed or Returned"
     return redirect(url_for('index'))
 
 
 
-@admin_bp.route('/disproof/<string:unique>')
-def disproof_item(unique):
+@admin_bp.route('/disproof/<int:pending_id>')
+def disproof_item(pending_id):
     if 'admin_login' in session:
-        pending_obj = Pending.query.filter_by(equip_unique_key=unique).first()
-        equipment_obj = Equipment.query.filter_by(equip_unique_key=unique).first()
-        student_obj = Student.query.filter_by(requested_item=unique).first()
-        if not pending_obj.is_verified:
+        pending_obj = Pending.query.filter_by(pending_id=pending_id).first()
+        equipment_obj = Equipment.query.filter_by(equip_unique_key=pending_obj.equip_unique_key).first()
+        student_obj = Student.query.filter_by(requested_item=pending_obj.equip_unique_key).first()
+        borrowed_obj = Borrowed.query.filter_by(pending_id=pending_obj.pending_id).first()
+        if not pending_obj.is_verified or not borrowed_obj:
             db.session.delete(pending_obj)
             db.session.delete(student_obj)
             equipment_obj.is_available=1
             equipment_obj.is_pending=0
             db.session.commit()       
-            return redirect(url_for('admin.load_option', option='pending-items'))
-        return redirect(url_for('admin.load_option', option='pending-items'))
+            return redirect(url_for('admin.dashboard'))
+        return f"""
+                <script>
+                    alert("Cant delete item");
+                    window.location.href='/dashboard';
+                </script>
+                """
     return redirect(url_for('index'))
 
 @admin_bp.route('/verify/<string:unique>')
@@ -122,8 +151,13 @@ def verify_item(unique):
             )
             db.session.add(borrowed_obj)
             db.session.commit()
-            return redirect(url_for('admin.load_option', option='pending-items'))
-        return f"Student already Verified"
+            return redirect(url_for('admin.dashboard'))
+        return f"""
+                <script>
+                    alert("Item already Verified");
+                    window.location.href='/dashboard';
+                </script>
+                """
     return redirect(url_for('index'))
 
 #render the pending items student requested

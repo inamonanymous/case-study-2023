@@ -6,6 +6,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
     <title>Admin</title>
 </head>
 <style>
@@ -117,7 +118,7 @@ img {
         </div>
         <nav class="navbar">
             <a href="/dashboard">Home</a>
-            <a href="">Services</a>
+            <a href="http://localhost:3000" target="_blank">Services</a>
             <a href="#" onclick="toggleFooter()">Contact</a>
             <!-- Add other navigation links as needed -->
         </nav>
@@ -125,7 +126,6 @@ img {
 
     {% block body %}{% endblock %}
     
-    <button class="btn btn-outline-info" id="footerToggle" onclick="toggleFooter()">About Us!</button>
     <div class="footer" id="footer">
         <div class="footer-content">
             <div class="footer-section">
@@ -182,6 +182,7 @@ img {
         footer.style.transform = 'translateY(100%)'; // Ensure it starts out of view
     };
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.2/axios.min.js"></script>
 </body>
 
     

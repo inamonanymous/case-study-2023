@@ -26,7 +26,7 @@
                 <a class="nav-link" href="javascript:void(0);" onclick="loadOption('list-equipments', this)">List of Equipments  </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link text-bg-danger" href="javascript:void(0);" onclick="loadOption('logout', this)">Log out</a>
+                <a class="nav-link text-bg-danger" href="javascript:void(0);" onclick="logout()">Log out</a>
             </li>
         </ul>
     </div>
@@ -54,12 +54,64 @@
                 });
         }
         
+        function editEquipment(equip_id){
+            if (confirm("Do you want to continue editing this Equipment?")){
+                const formData = {
+                    "args_equip_id": equip_id,
+                    "args_equip_name": document.getElementById('args_equip_type_edit').value
+                }
+                axios.put(`/edit-equipment/${equip_id}`, formData).then(response => {                   
+                    alert("Item successfully updated");
+                    window.location.href='/dashboard';
+                }).catch(error => {
+                    alert("Item unsuccessfully updated");
+                    console.log(error);
+                });
+            }
+        }
+
+        function deleteEquipment(equip_id){
+            axios.delete(`delete-equipment/${equip_id}`).then(response => {
+                alert("Item successfully deleted");
+                window.location.href='/dashboard';
+            }).catch(error => {
+                alert("Item unsuccessfully deleted");
+                console.log(error);
+            });
+        }
+
+        function manageItem(value, equip_id){
+            if (value==="0"){
+                document.getElementById('modalBackgroundEdit').style.display = 'flex';
+                document.getElementById('equip_type_view').append(equip_id);
+                document.getElementById('equipmentFormEdit').addEventListener('submit', function(event){
+                    event.preventDefault();
+                    editEquipment(equip_id)
+                })
+
+            } else if (value==="1"){
+                if (confirm("Are you sure you want to delete this item?")){
+                    deleteEquipment(equip_id);
+                }
+            } else {
+                
+            }
+
+        }
+
         function openModal() {
             document.getElementById('modalBackground').style.display = 'flex';
         }
 
         function closeModal() {
             document.getElementById('modalBackground').style.display = 'none';
+        }
+        function closeModalEdit() {
+            document.getElementById('modalBackgroundEdit').style.display = 'none';
+        }
+
+        function logout(){
+            window.location.href='/';
         }
 
     </script>

@@ -7,7 +7,15 @@ import string
 
 class ShowEquipments(Resource):
     def get(self):
-        equipment = Equipment.query.all()
+        search_query = request.args.get('search', '').lower()
+        if not search_query:
+            equipment = Equipment.query.order_by(Equipment.equip_type.asc()).all()
+        else:
+            # Adjust this query to match your database structure and search requirements
+            equipment = Equipment.query.filter(
+                (Equipment.equip_id.ilike(f'%{search_query}%')) | 
+                (Equipment.equip_type.ilike(f'%{search_query}%'))
+            ).all()
         equip_id = [e.equip_id for e in equipment]
         equip_type = [e.equip_type for e in equipment]
         equip_unique_key = [e.equip_unique_key for e in equipment]
@@ -86,7 +94,7 @@ class Students(Resource):
                 requested_item=args['args_requested_item'].strip()
             )
         equip_obj = Equipment.query.filter_by(equip_unique_key=args['args_requested_item']).first()
-        if equip_obj.is_available and not equip_obj.is_pending:
+        if equip_obj.is_available:
             pending_obj = Pending(
                 equip_type=equip_obj.equip_type,
                 equip_unique_key=equip_obj.equip_unique_key,
@@ -94,8 +102,6 @@ class Students(Resource):
                 student_name=f"{student_obj.student_surname}, {student_obj.student_firstname}",
                 is_verified=0
             )
-            equip_obj.is_pending=1
-            equip_obj.is_available=0
             student_obj.status='requested'
             db.session.add(pending_obj)
             db.session.add(student_obj)
