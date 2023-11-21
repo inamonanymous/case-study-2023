@@ -6,12 +6,11 @@
   background-repeat: no-repeat;
   background-attachment: scroll;
   background-position: center top;
-  max-height:none;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 20px;
-  height: 100%;
+  min-height: 100vh; /* Set the minimum height to cover the entire viewport */
 }
 
 .dashboard-content {
@@ -21,10 +20,9 @@
   text-align: center;
   max-width: fit-content;
   max-height: 100%;
-  
 }
 
-.display-4 {
+.display-title {
   font-size: 2.5rem;
   margin-bottom: 20px;
 }
@@ -39,9 +37,6 @@
   flex-wrap: wrap;
   gap: 10px;
   justify-content: center;
-  display: flex;
-  flex-wrap: wrap; /* Allow buttons to wrap to the next line on smaller screens */
-  justify-content: space-between;
 }
 
 .btn {
@@ -53,20 +48,19 @@
 .content-container {
   margin-top: 20px;
   max-width: fit-content;
-  
 }
 
 @media (max-width: 768px) {
-  .display-4 {
-    font-size: 1.5rem; /* Adjust font size for smaller screens */
+  .display-title {
+    font-size: 1.5rem;
   }
 
   .lead {
-    font-size: 1rem; /* Adjust font size for smaller screens */
+    font-size: 1rem;
   }
 
   .buttons {
-    flex-direction: column; /* Stack buttons on top of each other */
-    align-items: center; /* Center-align buttons */
+    flex-direction: column;
+    align-items: center;
   }
 }

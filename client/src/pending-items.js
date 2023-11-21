@@ -6,12 +6,14 @@ function booleanToYesNo(value) {
   return value ? 'Yes' : 'No';
 }
 
+function capitalize(str){
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 function PendingItems() {
   const [items, setItems] = useState({
     pending_id: [],
     equip_type: [],
-    student_name: [],
-    student_number: [],
     equip_unique_key: [],
     is_verified: [],
   });
@@ -37,8 +39,6 @@ function PendingItems() {
               <th>Pending Id</th>
               <th>Type</th>
               <th>Unique Key</th>
-              <th>Student Number</th>
-              <th>Student Name</th>
               <th>Verified</th>
             </tr>
           </thead>
@@ -46,10 +46,8 @@ function PendingItems() {
             {items.equip_unique_key.map((unique_key, index) => (
               <tr key={index}>
                 <td>{items.pending_id[index]}</td>
-                <td>{items.equip_type[index]}</td>
+                <td>{capitalize(items.equip_type[index])}</td>
                 <td>{unique_key}</td>
-                <td>{items.student_number[index]}</td>
-                <td>{items.student_name[index]}</td>
                 <td>{booleanToYesNo(items.is_verified[index])}</td>
               </tr>
             ))}

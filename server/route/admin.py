@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, url_for, session, flash, redirect, jsonify
-from models.database import Admin, Pending, Student, Borrowed, Equipment, db , Completed
+from models.database import Admin, Pending, Student, Borrowed, Equipment, db , Completed, Violators
 from werkzeug.security import check_password_hash, generate_password_hash
 from resource.user import PendingItems, BorrowedItems, CompletedItems, ShowEquipments
 import datetime
@@ -53,9 +53,16 @@ def load_option(option):
         p_items = PendingItems()
         c_items = CompletedItems()
         list_equipments = ShowEquipments()
+        violators = Violators.query.order_by(Violators.violator_id.desc()).all()
+        Borrowed.penalty_checker()
         
         pending = p_items.get()
         borrowed = b_items.get()
+        for i in range(len(borrowed['borrow_id'])):
+            if borrowed['time_quota'][i]:
+                borrowed['time_quota'][i] = datetime.datetime.strptime(borrowed['time_quota'][i], '%Y-%m-%d %H:%M:%S')
+            pass
+
         completed = c_items.get()
         equipments = list_equipments.get()
         
@@ -63,7 +70,8 @@ def load_option(option):
                                    borrowed=borrowed, 
                                    pending=pending, 
                                    completed=completed,
-                                   equipments=equipments)
+                                   equipments=equipments,
+                                   violators=violators)
         return content
     return redirect('index')
 
@@ -141,8 +149,11 @@ def verify_item(unique):
     if 'admin_login' in session:
         pending_obj = Pending.query.filter_by(equip_unique_key=unique).first()
         student_obj = Student.query.filter_by(requested_item=unique).first()
+        equipmemt_obj = Equipment.query.filter_by(equip_unique_key=unique).first()
         if not pending_obj.is_verified:
             pending_obj.is_verified=1
+            equipmemt_obj.is_available=0
+            pending_obj.is_pending=1
             student_obj.status = 'to-receive'
             borrowed_obj = Borrowed(
                 time_quota=None,
@@ -154,7 +165,7 @@ def verify_item(unique):
             return redirect(url_for('admin.dashboard'))
         return f"""
                 <script>
-                    alert("Item already Verified");
+                    alert("Item Key: [{ pending_obj.equip_unique_key }] already Verified and Ongoing to StudentID: [{student_obj.student_number}] with Status: [{student_obj.status}]");
                     window.location.href='/dashboard';
                 </script>
                 """

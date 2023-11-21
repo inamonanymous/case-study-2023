@@ -15,7 +15,9 @@
         {% for index in range(borrowed['borrow_id']|length) %}
         <tr>
             <td>{{ borrowed['pending_id'][index] }}</td>
-            <td>{{ borrowed['time_quota'][index] }}</td>
+            <td>
+                {{ borrowed['time_quota'][index].strftime('%Y-%m-%d %I:%M:%S %p') if borrowed['time_quota'][index] is not none else "Item still on hold" }}
+            </td>
             <td>{{ 'Yes' if borrowed['is_claimed'][index] else 'No' }}</td>
             <td>{{ 'Yes' if borrowed['is_returned'][index] else 'No' }}</td>
             <td>{{ borrowed['pending_id'][index] }}</td>

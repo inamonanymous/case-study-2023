@@ -11,7 +11,7 @@
   border-radius: 15px;
   padding: 20px;
   text-align: center;
-  max-width: fit-content;
+  max-width: 60vh;
   margin: 0 auto; /* Center the content horizontally */
   overflow-y: auto; /* Enable vertical scrolling */
   max-height: 80vh; /* Set a max height */

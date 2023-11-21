@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash, generate_password_hash
+import datetime
 db = SQLAlchemy()
 
 class Equipment(db.Model): 
@@ -24,11 +25,38 @@ class Pending(db.Model):
 class Borrowed(db.Model):
     __tablename__ = 'borrowed'
     borrow_id = db.Column(db.Integer, primary_key=True)
-    time_quota = db.Column(db.Time)
+    time_quota = db.Column(db.DateTime)
     is_claimed = db.Column(db.Boolean, default=False)
     is_returned = db.Column(db.Boolean, default=False)
+    penalty = db.Column(db.Boolean, default=False)
     pending_id = db.Column(db.Integer, db.ForeignKey('pending.pending_id'), nullable=False)
 
+    @classmethod
+    def penalty_checker(cls):
+        all_items = cls.query.all()
+        for i in all_items:
+            check_current = Violators.query.filter_by(borrow_id=i.borrow_id).first()
+            if check_current:
+                continue
+            if i.time_quota:
+                if i.time_quota <= datetime.datetime.now():
+                    i.penalty=1
+                    pending_item = Pending.query.filter_by(pending_id=i.pending_id).first()
+                    violator_entry = Violators(
+                        borrow_id=i.borrow_id,
+                        student_number=pending_item.student_number,
+                        equip_unique_key=pending_item.equip_unique_key
+                    )
+                    db.session.add(violator_entry )
+                    db.session.commit()
+            pass
+
+class Violators(db.Model):
+    __tablename__ = 'violators'
+    violator_id = db.Column(db.Integer, primary_key=True)
+    borrow_id = db.Column(db.Integer)
+    student_number = db.Column(db.String(50))
+    equip_unique_key = db.Column(db.String(50))
 
 class Student(db.Model):
     __tablename__ = 'student'

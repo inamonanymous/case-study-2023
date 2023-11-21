@@ -1,0 +1,109 @@
+{% extends "tables.html" %}
+{% block body %}
+
+<style>
+    #studentModal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000; /* Ensure it's on top of other elements */
+        display: none; /* Initially hidden */
+    }
+    #equipmentModal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000; /* Ensure it's on top of other elements */
+        display: none; /* Initially hidden */
+    }
+
+    .modal-content {
+        background-color: #fff;
+        padding: 10px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        text-align: center;
+    }
+
+    .modal-text {
+        color: #333;
+        font-size: 14px;
+    }
+
+    .modal-close {
+        color: #0066cc; /* Adjusted close link color */
+        text-decoration: none;
+        cursor: pointer;
+        font-weight: bold;
+        margin-top: 15px;
+        display: inline-block;
+    }
+</style>
+
+<div id="equipmentModal">
+    <div class="modal-content">
+        <p id="equipmentIdModal" class="modal-text"><strong>Loading... </strong></p>
+        <p id="equipmentTypeModal" class="modal-text"><strong>Loading... </strong></p>
+        <p id="equipmentUniqueKeyModal" class="modal-text"><strong>Loading... </strong></p>
+        <a href="#" class="modal-close" onclick="closeEquipmentModal()">Exit</a>
+    </div>
+</div>
+<div id="studentModal">
+    <div class="modal-content">
+        <p id="studentNumberModal" class="modal-text"><strong>Loading... </strong></p>
+        <p id="studentSectionModal" class="modal-text"><strong>Loading... </strong></p>
+        <p id="studentDepartmentModal" class="modal-text"><strong>Loading... </strong></p>
+        <p id="studentYearModal" class="modal-text"><strong>Loading... </strong></p>
+        <p id="studentFirstnameModal" class="modal-text"><strong>Loading... </strong></p>
+        <p id="studentLastnameModal" class="modal-text"><strong>Loading... </strong></p>
+        
+        <a href="#" class="modal-close" onclick="closeStudentModal()">Exit</a>
+    </div>
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>Violator Id</th>
+            <th>Borrowed Item ID</th>
+            <th>Student Number</th>
+            <th>Equipment Unique Key</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for i in violators %}
+        <tr>
+            <td>{{ i.violator_id }}</td>
+            <td>{{ i.borrow_id }}</td>
+            <td>
+                <a href="javascript:void(0);" onclick="showStudentModal('{{ i.student_number }}')">
+                    {{ i.student_number }}
+                </a>
+            </td>
+            <td>
+                <a href="javascript:void(0);" onclick="showEquipmentModal('{{ i.equip_unique_key }}')">
+                    {{ i.equip_unique_key }}
+                </a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<script>
+    
+</script>
+
+{% endblock %}

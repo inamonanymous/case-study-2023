@@ -22,7 +22,7 @@
 }
 
 .pending-items-table {
-  width: 100%;
+  max-width: 60vh;
   border-collapse: collapse;
   
   border-radius: 5px;

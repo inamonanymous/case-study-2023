@@ -5,7 +5,8 @@
   border-radius: 15px;
   padding: 20px;
   text-align: center;
- 
+  overflow-y: auto; /* Enable vertical scrolling */
+  max-height: 80vh; /* Set a max height */
   margin: 0 auto; /* Center the content horizontally */
 }
 
@@ -15,7 +16,7 @@
 }
 
 .completed-items-table {
-  width: 100%;
+  max-width: 60vh;
   border-collapse: collapse;
   border-radius: 5px;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);

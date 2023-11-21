@@ -5,17 +5,20 @@ import './styles/completed-items.css';
 function CompletedItems() {
   const [items, setItems] = useState({
     completed_id: [],
-    student_number: [],
     student_department: [],
-    student_name: [],
     equip_type: [],
     equip_unique_key: [],
   });
+
+  function capitalize(str){
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
 
   useEffect(() => {
     fetch('/user/completed-items')
       .then((response) => response.json())
       .then((data) => {
+        console.log(data);
         setItems(data);
       })
       .catch((error) => {
@@ -30,10 +33,7 @@ function CompletedItems() {
         <table className="completed-items-table">
           <thead>
             <tr>
-              <th>Completed Id</th>
-              <th>Student Number</th>
               <th>Student Department</th>
-              <th>Student Name</th>
               <th>Equipment Type</th>
               <th>Equipment Unique Key</th>
             </tr>
@@ -41,11 +41,8 @@ function CompletedItems() {
           <tbody>
             {items.completed_id.map((completed_id, index) => (
               <tr key={index}>
-                <td>{completed_id}</td>
-                <td>{items.student_number[index]}</td>
                 <td>{items.student_department[index]}</td>
-                <td>{items.student_name[index]}</td>
-                <td>{items.equip_type[index]}</td>
+                <td>{capitalize(items.equip_type[index])}</td>
                 <td>{items.equip_unique_key[index]}</td>
               </tr>
             ))}

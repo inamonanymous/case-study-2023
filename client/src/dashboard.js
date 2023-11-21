@@ -1,4 +1,3 @@
-// src/Dashboard.js
 import React, { useState } from 'react';
 import BorrowedItems from './borrowed-items';
 import AvailableItems from './available-items';
@@ -17,21 +16,21 @@ function Dashboard() {
   };
 
   const renderContent = () => {
-    return selectedContent ? contentComponents[selectedContent] : <div>Welcome to the dashboard!</div>;
+    return selectedContent ? contentComponents[selectedContent] : <div></div>;
   };
 
   const buttons = [
-    { label: 'Display Borrowed Equipments', content: 'borrowed-items' },
-    { label: 'Display All Equipments', content: 'available-items' },
-    { label: 'Display Pending Equipments', content: 'pending-items' },
-    { label: 'Display Transaction History', content: 'completed-items' },
+    { label: 'Borrowed Equipment', content: 'borrowed-items' },
+    { label: 'Available Equipment', content: 'available-items' },
+    { label: 'Pending Equipment', content: 'pending-items' },
+    { label: 'Transaction History', content: 'completed-items' },
   ];
 
   return (
     <div className="dashboard-container">
       <div className="dashboard-content">
-        <h1 className="display-4">Dashboard</h1>
-        <p className="lead">Digital Sports Equipment Monitoring</p>
+        <h1 className="display-title">Digital Sports Equipment Monitoring System</h1>
+        <p className="lead">Empower athletes, coaches, and sports enthusiasts with cutting-edge technology. Track, analyze, and optimize your sporting experience like never before. Enhance performance, prevent injuries, and revolutionize the way you engage with sports equipment. Your journey to peak performance starts here.</p>
         <div className="buttons">
           {buttons.map((button, index) => (
             <button

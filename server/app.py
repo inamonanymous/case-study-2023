@@ -3,7 +3,7 @@ import os
 from flask_migrate import Migrate
 from dotenv import load_dotenv
 from flask_restful import Api
-from resource.user import ShowEquipments, Equipments,  Students, PendingItems, BorrowedItems, CompletedItems
+from resource.user import ShowEquipments, Equipments,  Students, PendingItems, BorrowedItems, CompletedItems, EachStudent
 from models.database import db
 from flask_cors import CORS
 from route.admin import admin_bp 
@@ -20,6 +20,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URI')
 db.init_app(app)
 api = Api(app)
 
+api.add_resource(EachStudent, '/user/student/<string:student_number>')
 api.add_resource(Students, '/user/student')
 api.add_resource(CompletedItems, '/user/completed-items')
 api.add_resource(BorrowedItems, '/user/borrowed-items')

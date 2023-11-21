@@ -4,18 +4,18 @@ from models.database import db, Equipment, Student, Pending, Borrowed, Completed
 import random
 import string
 
-
 class ShowEquipments(Resource):
     def get(self):
         search_query = request.args.get('search', '').lower()
         if not search_query:
-            equipment = Equipment.query.order_by(Equipment.equip_type.asc()).all()
+            equipment = Equipment.query.filter_by(is_available=1).order_by(Equipment.equip_type.asc()).all()
         else:
             # Adjust this query to match your database structure and search requirements
-            equipment = Equipment.query.filter(
+            equipment = Equipment.query.filter_by(is_available=1).filter(
                 (Equipment.equip_id.ilike(f'%{search_query}%')) | 
-                (Equipment.equip_type.ilike(f'%{search_query}%'))
-            ).all()
+                (Equipment.equip_type.ilike(f'%{search_query}%')) | 
+                (Equipment.equip_unique_key.ilike(f'%{search_query}%'))
+            ).order_by(Equipment.equip_type.asc()).all()
         equip_id = [e.equip_id for e in equipment]
         equip_type = [e.equip_type for e in equipment]
         equip_unique_key = [e.equip_unique_key for e in equipment]
@@ -79,6 +79,16 @@ student_resource_fields = {
     'requested_item': fields.String
 }
 
+class EachStudent(Resource):
+    @marshal_with(student_resource_fields)
+    def get(self, student_number):
+        if 'admin_login' not in session:
+            abort(401, message="Unauthorized")
+        student = Student.query.filter_by(student_number=student_number).first()
+        if not student:
+            abort(409, message="Not Found")
+        return student
+
 class Students(Resource):
     @marshal_with(student_resource_fields)
     def post(self):
@@ -114,7 +124,7 @@ class Students(Resource):
 
 class PendingItems(Resource):
     def get(self):
-        pending = Pending.query.all()
+        pending = Pending.query.order_by(Pending.pending_id.desc()).all()
         pending_id = [p.pending_id for p in pending]
         equip_type = [p.equip_type for p in pending]
         equip_unique_key = [p.equip_unique_key for p in pending]
@@ -135,9 +145,9 @@ class PendingItems(Resource):
     
 class BorrowedItems(Resource):
     def get(self):
-        borrowed = Borrowed.query.all()
+        borrowed = Borrowed.query.order_by(Borrowed.borrow_id.desc()).all()
         borrow_id = [b.borrow_id for b in borrowed]
-        time_quota = [b.time_quota.strftime('%H:%M:%S') if b.time_quota is not None else None for b in borrowed]
+        time_quota = [b.time_quota.strftime('%Y-%m-%d %H:%M:%S') if b.time_quota is not None else None for b in borrowed]
         is_claimed = [b.is_claimed for b in borrowed]
         is_returned = [b.is_returned for b in borrowed]
         pending_id = [b.pending_id for b in borrowed]
@@ -155,22 +165,36 @@ class BorrowedItems(Resource):
 
 class CompletedItems(Resource):
     def get(self):
-        completed = Completed.query.all()
+        completed = Completed.query.order_by(Completed.completed_id.desc()).all()
+        if 'admin_login' in session:
+            completed_id = [c.completed_id for c in completed]
+            student_number = [c.student_number for c in completed]
+            student_department = [c.student_department for c in completed]
+            student_name = [c.student_name for c in completed]
+            equip_type = [c.equip_type for c in completed]
+            equip_unique_key = [c.equip_unique_key for c in completed]
+
+            completed_items = {
+                "completed_id": completed_id,
+                "student_number": student_number,
+                "student_department": student_department,
+                "student_name": student_name,
+                "equip_type": equip_type,
+                "equip_unique_key": equip_unique_key
+            }
+
+            return completed_items
+        
         completed_id = [c.completed_id for c in completed]
-        student_number = [c.student_number for c in completed]
         student_department = [c.student_department for c in completed]
-        student_name = [c.student_name for c in completed]
         equip_type = [c.equip_type for c in completed]
-        equip_unique_key = [c.equip_unique_key for c in completed]
+        equip_unique_key = [c.equip_unique_key for c in completed]    
 
         completed_items = {
             "completed_id": completed_id,
-            "student_number": student_number,
             "student_department": student_department,
-            "student_name": student_name,
             "equip_type": equip_type,
             "equip_unique_key": equip_unique_key
         }
-
-        return completed_items
     
+        return completed_items

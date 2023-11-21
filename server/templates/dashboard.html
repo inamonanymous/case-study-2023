@@ -26,6 +26,9 @@
                 <a class="nav-link" href="javascript:void(0);" onclick="loadOption('list-equipments', this)">List of Equipments  </a>
             </li>
             <li class="nav-item">
+                <a class="nav-link" href="javascript:void(0);" onclick="loadOption('violators', this)">Violators  </a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link text-bg-danger" href="javascript:void(0);" onclick="logout()">Log out</a>
             </li>
         </ul>
@@ -36,6 +39,40 @@
         </div>
     </div>
     <script>
+        function showStudentModal(student_number){
+            axios.get(`/user/student/${student_number}`).then(response => {
+                console.log(response);
+                var studentModal = document.getElementById("studentModal");
+                if (studentModal) {
+                    studentModal.style.display = 'flex';
+                    document.getElementById('studentNumberModal').textContent = "Student Number: " + response.data.student_number;
+                    document.getElementById('studentSectionModal').textContent = "Student Section: "+ response.data.student_section;
+                    document.getElementById('studentDepartmentModal').textContent = "Student Department: "+ response.data.student_department;
+                    document.getElementById('studentYearModal').textContent = "Student Year: "+ response.data.student_year;
+                    document.getElementById('studentFirstnameModal').textContent = "Student Firstname: "+ response.data.student_firstname;
+                    document.getElementById('studentLastnameModal').textContent = "Student Lastname: "+ response.data.student_lastname;
+                }
+            }).catch(error => {
+                console.log(error);
+                alert(error.response);
+            });
+        }
+        
+        function showEquipmentModal(unique_key){
+            axios.get(`/user/equipments/${unique_key}`).then(response => {
+                console.log(response);
+                var equipmentModal = document.getElementById("equipmentModal");
+                if (equipmentModal) {
+                    equipmentModal.style.display = 'flex';
+                    document.getElementById('equipmentIdModal').textContent = "Equipment ID: " + response.data.equip_id;
+                    document.getElementById('equipmentTypeModal').textContent = "Equipment Type: " + response.data.equip_type;
+                    document.getElementById('equipmentUniqueKeyModal').textContent = "Equipment Unique Key: " + response.data.equip_unique_key;
+                }
+            }).catch(error => {
+                alert(error.response);
+            });
+        }
+
         function loadOption(option, clickedElement) {
         // Remove the 'active' class from all tabs
             const tabs = document.querySelectorAll('.nav-item');
@@ -108,6 +145,12 @@
         }
         function closeModalEdit() {
             document.getElementById('modalBackgroundEdit').style.display = 'none';
+        }
+        function closeEquipmentModal() {
+            document.getElementById('equipmentModal').style.display = 'none';
+        }
+        function closeStudentModal() {
+            document.getElementById('studentModal').style.display = 'none';
         }
 
         function logout(){
