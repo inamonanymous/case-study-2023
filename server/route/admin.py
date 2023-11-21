@@ -3,6 +3,7 @@ from models.database import Admin, Pending, Student, Borrowed, Equipment, db , C
 from werkzeug.security import check_password_hash, generate_password_hash
 from resource.user import PendingItems, BorrowedItems, CompletedItems, ShowEquipments
 import datetime
+from route.mail import sendMessage
 
 admin_bp = Blueprint('admin', __name__)
 
@@ -160,6 +161,7 @@ def verify_item(unique):
                 is_returned=0,
                 pending_id=pending_obj.pending_id
             )
+            sendMessage(student_obj, equipmemt_obj.equip_type)
             db.session.add(borrowed_obj)
             db.session.commit()
             return redirect(url_for('admin.dashboard'))
@@ -190,7 +192,7 @@ def logged_in():
         
         return redirect(url_for('admin.dashboard'))
     
-    return "wrong username or password"
+    return "<script>alert('Invalid login credentials'); window.location.href='/';</script>"
 
 @admin_bp.route('/signed-up', methods=["POST", "GET"])
 def sign_up():
