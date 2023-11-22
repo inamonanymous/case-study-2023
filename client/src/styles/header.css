@@ -1,0 +1,20 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* This ensures the footer sticks to the bottom */
+  }
+  
+  .footer-content {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    background-color: #333;
+    color: #fff;
+    padding: 1em;
+  }
+  
+  /* Add any additional styling as needed */
+  
