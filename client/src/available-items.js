@@ -16,7 +16,7 @@ function AvailableItems() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`/user/equipments/all?search=${searchQuery}`);
+        const response = await fetch(`http://127.0.0.1:5000/user/equipments/all?search=${searchQuery}`);
         const data = await response.json();
         setItems(data);
       } catch (error) {

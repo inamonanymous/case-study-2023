@@ -47,7 +47,7 @@ class Borrowed(db.Model):
                         student_number=pending_item.student_number,
                         equip_unique_key=pending_item.equip_unique_key
                     )
-                    db.session.add(violator_entry )
+                    db.session.add(violator_entry)
                     db.session.commit()
             pass
 

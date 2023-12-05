@@ -62,6 +62,7 @@ function PostStudentData({ args_requested_item }) {
       );
 
       if (response.status === 201) {
+        alert("Request form has been sent to Admin!");
         navigate('/dashboard');
       } else {
         setErrorMessage('Data could not be saved');

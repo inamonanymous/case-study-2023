@@ -32,6 +32,10 @@ td {
   padding: 10px;
 }
 
+td, thead {
+  color: black;
+}
+
 .equipment-details h3 {
   font-size: 20px;
   margin-bottom: 10px;

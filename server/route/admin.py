@@ -7,7 +7,16 @@ from route.mail import sendMessage
 
 admin_bp = Blueprint('admin', __name__)
 
-advance_datetime = datetime.datetime.now() + datetime.timedelta(hours=5)
+@admin_bp.route('/delete-violator/<int:id>', methods=['DELETE'])
+def delete_violator(id):
+    if 'admin_login' in session and request.method=="DELETE":
+        target_violator = Violators.query.filter_by(violator_id=id).first()
+        if not target_violator:
+            return jsonify({"message": "Violator not found"}), 404
+        db.session.delete(target_violator)
+        db.session.commit()
+        return jsonify({"message": "Violator deleted"}), 204
+    return redirect(url_for('index'))
 
 @admin_bp.route('/delete-equipment/<int:id>', methods=['DELETE'])
 def delete_equipment(id):
@@ -50,13 +59,13 @@ def save_equipment():
 @admin_bp.route('/option/<option>')
 def load_option(option):
     if 'admin_login' in session:
+        if option=="violators":
+            Borrowed.penalty_checker()
         b_items = BorrowedItems()
         p_items = PendingItems()
         c_items = CompletedItems()
         list_equipments = ShowEquipments()
         violators = Violators.query.order_by(Violators.violator_id.desc()).all()
-        Borrowed.penalty_checker()
-        
         pending = p_items.get()
         borrowed = b_items.get()
         for i in range(len(borrowed['borrow_id'])):
@@ -76,7 +85,6 @@ def load_option(option):
         return content
     return redirect('index')
 
-
 @admin_bp.route('/return/<int:id>')
 def return_item(id):
     if 'admin_login' in session:
@@ -95,20 +103,33 @@ def return_item(id):
                 equip_type = pending_obj.equip_type,
                 equip_unique_key = pending_obj.equip_unique_key
             )
+            violator_checker = Violators.query.filter_by(borrow_id=borrowed_obj.borrow_id).first()
             equip_obj.is_available = True
             equip_obj.is_pending = False
             db.session.add(completed_obj)
             db.session.delete(student_obj)
             db.session.delete(pending_obj)
             db.session.delete(borrowed_obj)
+            if violator_checker:
+                db.session.delete(violator_checker)
             db.session.commit()
-            return redirect(url_for('admin.dashboard'))
-        return f"It is either the Item isn't Claimed or Returned"
+            return f"""
+                    <script>
+                        alert("Equipment set to 'Returned' status");
+                        window.location.href = "/dashboard";
+                    </script>
+                    """
+        return f"""
+                <script>
+                        alert("Can't Return Item");
+                </script>
+                """
     return redirect(url_for('index'))
 
 @admin_bp.route('/claim/<int:id>')
 def claim_item(id):
     if 'admin_login' in session:
+        advance_datetime = datetime.datetime.now() + datetime.timedelta(hours=5)
         borrowed_obj = Borrowed.query.filter_by(pending_id=id).first()
         pending_obj = Pending.query.filter_by(pending_id=id).first()
         student_obj = Student.query.filter_by(requested_item=pending_obj.equip_unique_key).first()
@@ -117,11 +138,18 @@ def claim_item(id):
             borrowed_obj.time_quota = advance_datetime
             student_obj.status = 'claimed'
             db.session.commit()
-            return redirect(url_for('admin.dashboard'))
-        return f"It is either the Item isn't Claimed or Returned"
+            return f"""
+                        <script>
+                            alert("Equipment set to 'Claimed' status");
+                            window.location.href = "/dashboard";
+                        </script>
+                    """
+        return f"""
+                    <script>
+                        alert("Equipment cannot be claimed");
+                    </script>
+                """
     return redirect(url_for('index'))
-
-
 
 @admin_bp.route('/disproof/<int:pending_id>')
 def disproof_item(pending_id):

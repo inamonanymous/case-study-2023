@@ -15,7 +15,7 @@ function CompletedItems() {
   }
 
   useEffect(() => {
-    fetch('/user/completed-items')
+    fetch('http://127.0.0.1:5000/user/completed-items')
       .then((response) => response.json())
       .then((data) => {
         console.log(data);

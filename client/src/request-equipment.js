@@ -25,7 +25,7 @@ function RequestEquipment() {
 
   useEffect(() => {
     // Fetch data from the '/request-equipment/:equip_id' route
-    fetch(`/user/equipments/${equip_unique_key}`)
+    fetch(`http://127.0.0.1:5000/user/equipments/${equip_unique_key}`)
       .then((response) => response.json())
       .then((data) => {
         // Update the state with the fetched data

@@ -80,6 +80,7 @@
             <th>Borrowed Item ID</th>
             <th>Student Number</th>
             <th>Equipment Unique Key</th>
+            <th>Remove</th>
         </tr>
     </thead>
     <tbody>
@@ -95,6 +96,13 @@
             <td>
                 <a href="javascript:void(0);" onclick="showEquipmentModal('{{ i.equip_unique_key }}')">
                     {{ i.equip_unique_key }}
+                </a>
+            </td>
+            <td>
+                <a href="javascript:void(0);" onclick="deleteViolator('{{ i.violator_id }}')">
+                    <button class="btn btn-outline-danger">
+                        
+                    </button>
                 </a>
             </td>
         </tr>
